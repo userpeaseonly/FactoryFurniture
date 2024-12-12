@@ -1,9 +1,9 @@
 {% load static %}
 {% load i18n %}
 {% load humanize %}
-<tr class="border-b">
-    <td class="px-4 py-2">{{ dealer.name }}</td>
-    <td class="px-4 py-2">{{ dealer.phone_number1 }}</td>
-    <td class="px-4 py-2">{{ dealer.phone_number2 }}</td>
-    <td class="px-4 py-2">{{ dealer.address }}</td>
+<tr class="border-b hover:bg-gray-50 transition duration-150 ease-in-out">
+    <td class="px-4 py-2 text-gray-800 font-medium break-words">{{ dealer.name }}</td>
+    <td class="px-4 py-2 text-gray-600 break-words">{{ dealer.phone_number1 }}</td>
+    <td class="px-4 py-2 text-gray-600 break-words">{{ dealer.phone_number2|default:"N/A" }}</td>
+    <td class="px-4 py-2 text-gray-600 break-words">{{ dealer.address }}</td>
 </tr>

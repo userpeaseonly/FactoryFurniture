@@ -10,14 +10,24 @@
 </head>
 <body class="bg-gray-100 text-gray-800">
     <!-- Header -->
-    <header class="bg-gray-800 text-white shadow-md">
-        <nav class="container mx-auto px-6 py-3">
-            <ul class="flex justify-center space-x-6">
-                <li><a href="{% url 'home' %}" class="hover:text-yellow-400">Home</a></li>
-                <li><a href="{% url 'dashboard' %}" class="hover:text-yellow-400">Dashboard</a></li>
-                <li><a href="{% url 'products' %}" class="hover:text-yellow-400">Products</a></li>
-                <li><a href="{% url 'dealers' %}" class="hover:text-yellow-400">Dealers</a></li>
-                <li><a href="{% url 'orders' %}" class="hover:text-yellow-400">Orders</a></li>
+    <header class="bg-gray-800 text-white">
+        <nav class="container mx-auto px-6 py-3 flex flex-wrap items-center justify-between">
+            <div class="text-lg font-bold">
+                <a href="{% url 'home' %}" class="hover:text-yellow-400">Furniture Factory</a>
+            </div>
+            <!-- Hamburger Menu for Mobile -->
+            <button class="lg:hidden text-white focus:outline-none" id="mobile-menu-button">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
+            </button>
+            <!-- Navigation Links -->
+            <ul class="hidden lg:flex space-x-6 w-full lg:w-auto lg:flex-row lg:items-center mt-4 lg:mt-0" id="mobile-menu">
+                <li><a href="{% url 'home' %}" class="block lg:inline-block text-white hover:text-yellow-400">Home</a></li>
+                <li><a href="{% url 'dashboard' %}" class="block lg:inline-block text-white hover:text-yellow-400">Dashboard</a></li>
+                <li><a href="{% url 'dealers' %}" class="block lg:inline-block text-white hover:text-yellow-400">Dealers</a></li>
+                <li><a href="{% url 'products' %}" class="block lg:inline-block text-white hover:text-yellow-400">Products</a></li>
+                <li><a href="{% url 'orders' %}" class="block lg:inline-block text-white hover:text-yellow-400">Orders</a></li>
             </ul>
         </nav>
     </header>
@@ -34,5 +44,15 @@
             <p>&copy; 2024 Furniture Factory Management</p>
         </div>
     </footer>
+
+    <!-- JavaScript for Mobile Menu -->
+    <script>
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+    </script>
 </body>
 </html>

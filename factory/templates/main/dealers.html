@@ -4,37 +4,50 @@
 
 {% block content %}
 <div class="container mx-auto py-6">
-    <h1 class="text-2xl font-bold mb-4">Dealers</h1>
+    <h1 class="text-3xl font-bold text-center mb-6">Dealers</h1>
 
     <!-- Dealers List -->
-    <table class="table-auto w-full bg-white shadow-md rounded-lg mb-6">
-        <thead>
-            <tr class="bg-gray-200">
-                <th class="px-4 py-2">Name</th>
-                <th class="px-4 py-2">Phone 1</th>
-                <th class="px-4 py-2">Phone 2</th>
-                <th class="px-4 py-2">Address</th>
-            </tr>
-        </thead>
-        <tbody id="dealers-list">
-            {% for dealer in dealers %}
-                <tr class="border-b">
-                    <td class="px-4 py-2">{{ dealer.name }}</td>
-                    <td class="px-4 py-2">{{ dealer.phone_number1 }}</td>
-                    <td class="px-4 py-2">{{ dealer.phone_number2 }}</td>
-                    <td class="px-4 py-2">{{ dealer.address }}</td>
+    <div class="overflow-x-auto">
+        <table class="table-auto w-full bg-white shadow-md rounded-lg mb-6">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="px-4 py-2 text-left font-medium text-gray-700">Name</th>
+                    <th class="px-4 py-2 text-left font-medium text-gray-700">Phone 1</th>
+                    <th class="px-4 py-2 text-left font-medium text-gray-700">Phone 2</th>
+                    <th class="px-4 py-2 text-left font-medium text-gray-700">Address</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody id="dealers-list">
+                {% for dealer in dealers %}
+                <tr class="border-b hover:bg-gray-50 transition">
+                    <td class="px-4 py-2 text-gray-800">{{ dealer.name }}</td>
+                    <td class="px-4 py-2 text-gray-600">{{ dealer.phone_number1 }}</td>
+                    <td class="px-4 py-2 text-gray-600">{{ dealer.phone_number2|default:"N/A" }}</td>
+                    <td class="px-4 py-2 text-gray-600">{{ dealer.address }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
     <!-- Add Dealer Form -->
-    <form id="create-dealer-form" action="{% url 'create_dealer' %}" method="POST" hx-post="{% url 'create_dealer' %}" hx-target="#dealers-list" hx-swap="beforeend">
-        {% csrf_token %}
-        <div class="mb-4">
-            {{ form.as_p }}
-        </div>
-        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Add Dealer</button>
-    </form>
+    <div class="bg-white shadow-md rounded-lg p-6">
+        <h2 class="text-xl font-bold text-center mb-4">Add New Dealer</h2>
+        <form id="create-dealer-form" action="{% url 'create_dealer' %}" method="POST" 
+              hx-post="{% url 'create_dealer' %}" hx-target="#dealers-list" hx-swap="beforeend">
+            {% csrf_token %}
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                {{ form.name }}
+                {{ form.phone_number1 }}
+                {{ form.phone_number2 }}
+                {{ form.address }}
+            </div>
+            <div class="mt-6 text-center">
+                <button type="submit" class="bg-blue-500 text-white px-6 py-2 rounded-lg shadow-md hover:bg-blue-600 transition">
+                    Add Dealer
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
 {% endblock %}

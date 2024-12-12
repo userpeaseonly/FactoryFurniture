@@ -1,4 +1,6 @@
+from django.utils import timezone
 from django.shortcuts import render, redirect
+from django.db.models import Count, Sum
 from django.http import JsonResponse
 from .models import Dealer, Product, Order
 from .forms import DealerForm, ProductForm, OrderStepOneForm, OrderStepTwoForm, OrderStepThreeForm, OrderStepFourForm, OrderStepFiveForm
@@ -8,7 +10,31 @@ def home(request):
     return render(request, 'main/home.html')
 
 def dashboard(request):
-    return render(request, 'main/dashboard.html')
+    # Key Metrics
+    total_orders = Order.objects.count()
+    total_dealers = Dealer.objects.count()
+    total_products = Product.objects.count()
+    todays_orders = Order.objects.filter(delivery_date__date=timezone.now().date()).count()
+
+    # Recent Orders
+    recent_orders = Order.objects.order_by('-delivery_date')[:5]
+
+    # Orders by Delivery Type
+    orders_by_delivery_type = (
+        Order.objects.values('delivery_type')
+        .annotate(count=Count('id'))
+        .order_by('-count')
+    )
+
+    context = {
+        'total_orders': total_orders,
+        'total_dealers': total_dealers,
+        'total_products': total_products,
+        'todays_orders': todays_orders,
+        'recent_orders': recent_orders,
+        'orders_by_delivery_type': orders_by_delivery_type,
+    }
+    return render(request, 'main/dashboard.html', context)
 
 def products_page(request):
     products = Product.objects.all()
