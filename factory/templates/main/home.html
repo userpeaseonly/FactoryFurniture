@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<h1>Welcome to Furniture Factory Management</h1>
+<p>Select a page to get started:</p>
+<div class="navigation-cards">
+    <a href="{% url 'dashboard' %}" class="card">Dashboard</a>
+    <a href="{% url 'products' %}" class="card">Products</a>
+    <a href="{% url 'dealers' %}" class="card">Dealers</a>
+    <a href="{% url 'orders' %}" class="card">Orders</a>
+</div>
+{% endblock %}

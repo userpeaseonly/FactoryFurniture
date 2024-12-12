@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Furniture Factory{% endblock %}</title>
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" />
+</head>
+<body class="bg-gray-100 text-gray-800">
+    <!-- Header -->
+    <header class="bg-gray-800 text-white shadow-md">
+        <nav class="container mx-auto px-6 py-3">
+            <ul class="flex justify-center space-x-6">
+                <li><a href="{% url 'home' %}" class="hover:text-yellow-400">Home</a></li>
+                <li><a href="{% url 'dashboard' %}" class="hover:text-yellow-400">Dashboard</a></li>
+                <li><a href="{% url 'products' %}" class="hover:text-yellow-400">Products</a></li>
+                <li><a href="{% url 'dealers' %}" class="hover:text-yellow-400">Dealers</a></li>
+                <li><a href="{% url 'orders' %}" class="hover:text-yellow-400">Orders</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-6">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-4 mt-8">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2024 Furniture Factory Management</p>
+        </div>
+    </footer>
+</body>
+</html>
