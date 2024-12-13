@@ -1,26 +1,26 @@
 {% extends 'base.html' %}
-{% block title %}Create Order - Step 6{% endblock %}
+{% block title %}Buyurtma Yaratish - Yakuniy Qadam{% endblock %}
 {% block content %}
 <div class="container mx-auto py-6">
-    <h1 class="text-3xl font-bold text-center mb-6">Order Summary</h1>
+    <h1 class="text-3xl font-bold text-center mb-6">Buyurtma Xulosasi</h1>
     <ul class="bg-white shadow-md rounded-lg p-6 max-w-lg mx-auto">
-        <li class="py-2"><strong>Dealer:</strong> {{ order_summary.dealer.name }}</li>
-        <li class="py-2"><strong>Products:</strong>
+        <li class="py-2"><strong>Diler:</strong> {{ order_summary.dealer.name }}</li>
+        <li class="py-2"><strong>Mahsulotlar:</strong>
             <ul class="list-disc pl-6">
                 {% for product in order_summary.products %}
                 <li>{{ product.name }} - {{ product.price|floatformat:2 }} USD</li>
                 {% endfor %}
             </ul>
         </li>
-        <li class="py-2"><strong>Delivery Type:</strong> {{ order_summary.delivery_type }}</li>
-        <li class="py-2"><strong>Delivery Date:</strong> {{ order_summary.delivery_date }}</li>
-        <li class="py-2"><strong>Order Cost:</strong> {{ order_summary.order_cost|floatformat:2 }} USD</li>
-        <li class="py-2"><strong>Comment:</strong> {{ order_summary.comment|default:"N/A" }}</li>
+        <li class="py-2"><strong>Yetkazib Berish Turi:</strong> {{ order_summary.delivery_type }}</li>
+        <li class="py-2"><strong>Yetkazib Berish Sanasi:</strong> {{ order_summary.delivery_date }}</li>
+        <li class="py-2"><strong>Buyurtma Narxi:</strong> {{ order_summary.order_cost|floatformat:2 }} USD</li>
+        <li class="py-2"><strong>Izoh:</strong> {{ order_summary.comment|default:"Yo'q" }}</li>
     </ul>
     <form method="POST" class="mt-6 text-center">
         {% csrf_token %}
         <button type="submit" class="bg-green-500 text-white px-6 py-3 rounded-lg shadow-md hover:bg-green-600 transition">
-            Confirm Order
+            Buyurtmani Tasdiqlash
         </button>
     </form>
 </div>

@@ -1,20 +1,20 @@
 {% extends 'base.html' %}
 
-{% block title %}Dealers{% endblock %}
+{% block title %}Dilerlar{% endblock %}
 
 {% block content %}
 <div class="container mx-auto py-6">
-    <h1 class="text-3xl font-bold text-center mb-6">Dealers</h1>
+    <h1 class="text-3xl font-bold text-center mb-6">Dilerlar</h1>
 
-    <!-- Dealers List -->
+    <!-- Dilerlar Ro'yxati -->
     <div class="overflow-x-auto">
         <table class="table-auto w-full bg-white shadow-md rounded-lg mb-6">
             <thead>
                 <tr class="bg-gray-200">
-                    <th class="px-4 py-2 text-left font-medium text-gray-700">Name</th>
-                    <th class="px-4 py-2 text-left font-medium text-gray-700">Phone 1</th>
-                    <th class="px-4 py-2 text-left font-medium text-gray-700">Phone 2</th>
-                    <th class="px-4 py-2 text-left font-medium text-gray-700">Address</th>
+                    <th class="px-4 py-2 text-left font-medium text-gray-700">Ismi</th>
+                    <th class="px-4 py-2 text-left font-medium text-gray-700">Telefon 1</th>
+                    <th class="px-4 py-2 text-left font-medium text-gray-700">Telefon 2</th>
+                    <th class="px-4 py-2 text-left font-medium text-gray-700">Manzil</th>
                 </tr>
             </thead>
             <tbody id="dealers-list">
@@ -22,7 +22,7 @@
                 <tr class="border-b hover:bg-gray-50 transition">
                     <td class="px-4 py-2 text-gray-800 text-left">{{ dealer.name }}</td>
                     <td class="px-4 py-2 text-gray-600 text-left">{{ dealer.phone_number1 }}</td>
-                    <td class="px-4 py-2 text-gray-600 text-left">{{ dealer.phone_number2|default:"N/A" }}</td>
+                    <td class="px-4 py-2 text-gray-600 text-left">{{ dealer.phone_number2|default:"Noma'lum" }}</td>
                     <td class="px-4 py-2 text-gray-600 text-left">{{ dealer.address }}</td>
                 </tr>
                 {% endfor %}
@@ -30,9 +30,9 @@
         </table>
     </div>
 
-    <!-- Add Dealer Form -->
+    <!-- Diler Qo'shish Formasi -->
     <div class="bg-white shadow-md rounded-lg p-6">
-        <h2 class="text-xl font-bold text-center mb-4">Add New Dealer</h2>
+        <h2 class="text-xl font-bold text-center mb-4">Yangi Diler Qo'shish</h2>
         <form id="create-dealer-form" action="{% url 'create_dealer' %}" method="POST" 
               hx-post="{% url 'create_dealer' %}" hx-target="#dealers-list" hx-swap="beforeend">
             {% csrf_token %}
@@ -44,7 +44,7 @@
             </div>
             <div class="mt-6 text-center">
                 <button type="submit" class="bg-blue-500 text-white px-6 py-2 rounded-lg shadow-md hover:bg-blue-600 transition">
-                    Add Dealer
+                    Diler Qo'shish
                 </button>
             </div>
         </form>

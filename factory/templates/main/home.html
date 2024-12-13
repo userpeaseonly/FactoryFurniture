@@ -1,25 +1,25 @@
 {% extends 'base.html' %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Bosh Sahifa{% endblock %}
 
 {% block content %}
 <div class="container mx-auto py-6">
-    <h1 class="text-3xl font-bold text-center mb-4">Welcome to Furniture Factory Management</h1>
-    <p class="text-gray-700 text-center mb-8">Select a page to get started:</p>
+    <h1 class="text-3xl font-bold text-center mb-4">Mebel Fabrikasi Boshqaruviga Xush Kelibsiz</h1>
+    <p class="text-gray-700 text-center mb-8">Boshlash uchun sahifani tanlang:</p>
 
-    <!-- Navigation Cards -->
+    <!-- Navigatsiya Kartalari -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <a href="{% url 'dashboard' %}" class="bg-blue-500 text-white text-center py-6 rounded-lg shadow-lg hover:bg-blue-600 transition">
-            Dashboard
+            Asosiy Panel
         </a>
         <a href="{% url 'products' %}" class="bg-green-500 text-white text-center py-6 rounded-lg shadow-lg hover:bg-green-600 transition">
-            Products
+            Mahsulotlar
         </a>
         <a href="{% url 'dealers' %}" class="bg-yellow-500 text-white text-center py-6 rounded-lg shadow-lg hover:bg-yellow-600 transition">
-            Dealers
+            Dilerlar
         </a>
         <a href="{% url 'orders' %}" class="bg-red-500 text-white text-center py-6 rounded-lg shadow-lg hover:bg-red-600 transition">
-            Orders
+            Buyurtmalar
         </a>
     </div>
 </div>

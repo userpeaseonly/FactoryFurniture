@@ -18,7 +18,7 @@ class Product(models.Model):
 
 class DeliveryType(models.TextChoices):
     COLLECTION = 'collection', "Yig'ish"
-    DELIVERY = 'delivery', "Tekazib Berish"
+    DELIVERY = 'delivery', "Yetkazib Berish"
     EXPORTATION = 'exportation', "Olib Ketish"
 
 class Order(models.Model):

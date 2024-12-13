@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
-{% block title %}Create Order - Step 1{% endblock %}
+{% block title %}Buyurtma Yaratish - 1-qadam{% endblock %}
 {% block content %}
 <div class="container mx-auto py-6">
-    <h1 class="text-3xl font-bold text-center mb-6">Step 1: Select Dealer</h1>
+    <h1 class="text-3xl font-bold text-center mb-6">1-qadam: Diler Tanlash</h1>
     <form method="POST" class="max-w-lg mx-auto">
         {% csrf_token %}
         {{ form.as_p }}
         <div class="mt-6 text-center">
             <button type="submit" class="bg-blue-500 text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-600 transition">
-                Next
+                Keyingisi
             </button>
         </div>
     </form>

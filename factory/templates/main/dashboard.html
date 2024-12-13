@@ -1,41 +1,41 @@
 {% extends 'base.html' %}
 
-{% block title %}Dashboard{% endblock %}
+{% block title %}Asosiy Panel{% endblock %}
 
 {% block content %}
 <div class="container mx-auto py-6">
-    <h1 class="text-3xl font-bold text-center mb-6">Dashboard</h1>
+    <h1 class="text-3xl font-bold text-center mb-6">Asosiy Panel</h1>
 
-    <!-- Key Metrics -->
+    <!-- Asosiy Ko'rsatkichlar -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <div class="bg-white shadow-md rounded-lg p-6 text-center">
             <h2 class="text-2xl font-bold text-blue-600">{{ total_orders }}</h2>
-            <p class="text-gray-600">Total Orders</p>
+            <p class="text-gray-600">Jami Buyurtmalar</p>
         </div>
         <div class="bg-white shadow-md rounded-lg p-6 text-center">
             <h2 class="text-2xl font-bold text-green-600">{{ total_dealers }}</h2>
-            <p class="text-gray-600">Total Dealers</p>
+            <p class="text-gray-600">Jami Dilerlar</p>
         </div>
         <div class="bg-white shadow-md rounded-lg p-6 text-center">
             <h2 class="text-2xl font-bold text-yellow-600">{{ total_products }}</h2>
-            <p class="text-gray-600">Total Products</p>
+            <p class="text-gray-600">Jami Mahsulotlar</p>
         </div>
         <div class="bg-white shadow-md rounded-lg p-6 text-center">
             <h2 class="text-2xl font-bold text-red-600">{{ todays_orders }}</h2>
-            <p class="text-gray-600">Today's Orders</p>
+            <p class="text-gray-600">Bugungi Buyurtmalar</p>
         </div>
     </div>
 
-    <!-- Recent Orders -->
+    <!-- So'nggi Buyurtmalar -->
     <div class="bg-white shadow-md rounded-lg mb-8 overflow-x-auto">
-        <h3 class="text-lg font-bold p-4 border-b">Recent Orders</h3>
+        <h3 class="text-lg font-bold p-4 border-b">So'nggi Buyurtmalar</h3>
         <table class="table-auto w-full">
             <thead>
                 <tr class="bg-gray-200">
-                    <th class="px-4 py-2 text-left font-medium text-gray-700">Dealer</th>
-                    <th class="px-4 py-2 text-left font-medium text-gray-700">Delivery Date</th>
-                    <th class="px-4 py-2 text-left font-medium text-gray-700">Delivery Type</th>
-                    <th class="px-4 py-2 text-left font-medium text-gray-700">Cost</th>
+                    <th class="px-4 py-2 text-left font-medium text-gray-700">Diler</th>
+                    <th class="px-4 py-2 text-left font-medium text-gray-700">Yetkazib Berish Sanasi</th>
+                    <th class="px-4 py-2 text-left font-medium text-gray-700">Yetkazib Berish Turi</th>
+                    <th class="px-4 py-2 text-left font-medium text-gray-700">Narxi</th>
                 </tr>
             </thead>
             <tbody>
@@ -51,9 +51,9 @@
         </table>
     </div>
 
-    <!-- Graphical Insights -->
+    <!-- Grafik Ko'rsatkichlar -->
     <div class="bg-white shadow-md rounded-lg p-6">
-        <h3 class="text-lg font-bold mb-4 text-center">Orders by Delivery Type</h3>
+        <h3 class="text-lg font-bold mb-4 text-center">Yetkazib Berish Turiga Qarab Buyurtmalar</h3>
         <canvas id="deliveryTypeChart"></canvas>
     </div>
 </div>
@@ -65,7 +65,7 @@
     const deliveryTypeData = {
         labels: [{% for item in orders_by_delivery_type %}"{{ item.delivery_type }}"{% if not forloop.last %}, {% endif %}{% endfor %}],
         datasets: [{
-            label: 'Orders',
+            label: 'Buyurtmalar',
             data: [{% for item in orders_by_delivery_type %}{{ item.count }}{% if not forloop.last %}, {% endif %}{% endfor %}],
             backgroundColor: ['#4F46E5', '#34D399', '#FBBF24'],
         }]

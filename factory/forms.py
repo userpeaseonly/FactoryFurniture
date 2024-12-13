@@ -8,23 +8,22 @@ class DealerForm(forms.ModelForm):
         widgets = {
             'name': forms.TextInput(attrs={
                 'class': 'block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400',
-                'placeholder': 'Dealer Name'
+                'placeholder': 'Diler Ismi'
             }),
             'phone_number1': forms.TextInput(attrs={
                 'class': 'block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400',
-                'placeholder': 'Phone Number 1'
+                'placeholder': 'Telefon Raqami 1'
             }),
             'phone_number2': forms.TextInput(attrs={
                 'class': 'block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400',
-                'placeholder': 'Phone Number 2'
+                'placeholder': 'Telefon Raqami 2'
             }),
             'address': forms.Textarea(attrs={
                 'class': 'block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400',
-                'placeholder': 'Address',
+                'placeholder': 'Manzil',
                 'rows': 3
             }),
         }
-
 
 
 class ProductForm(forms.ModelForm):
@@ -34,14 +33,13 @@ class ProductForm(forms.ModelForm):
         widgets = {
             'name': forms.TextInput(attrs={
                 'class': 'block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400',
-                'placeholder': 'Product Name'
+                'placeholder': 'Mahsulot Nomi'
             }),
             'price': forms.NumberInput(attrs={
                 'class': 'block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400 mb-4',
-                'placeholder': 'Price'
+                'placeholder': 'Narxi'
             }),
         }
-
 
 
 class OrderStepOneForm(forms.Form):
@@ -52,6 +50,7 @@ class OrderStepOneForm(forms.Form):
         })
     )
 
+
 class OrderStepTwoForm(forms.Form):
     products = forms.ModelMultipleChoiceField(
         queryset=Product.objects.all(),
@@ -60,6 +59,7 @@ class OrderStepTwoForm(forms.Form):
         })
     )
 
+
 class OrderStepThreeForm(forms.Form):
     delivery_type = forms.ChoiceField(
         choices=DeliveryType.choices,
@@ -67,6 +67,7 @@ class OrderStepThreeForm(forms.Form):
             'class': 'block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:w-auto',
         })
     )
+
 
 class OrderStepFourForm(forms.Form):
     delivery_date = forms.DateField(
@@ -78,16 +79,17 @@ class OrderStepFourForm(forms.Form):
     order_cost = forms.DecimalField(
         widget=forms.NumberInput(attrs={
             'class': 'block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:w-auto',
-            'placeholder': 'Order Cost',
+            'placeholder': 'Buyurtma Narxi',
         })
     )
+
 
 class OrderStepFiveForm(forms.Form):
     comment = forms.CharField(
         required=False,
         widget=forms.Textarea(attrs={
             'class': 'block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400 sm:w-auto',
-            'placeholder': 'Comment (Optional)',
+            'placeholder': 'Izoh (Majburiy Emas)',
             'rows': 3,
         })
     )

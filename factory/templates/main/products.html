@@ -1,18 +1,18 @@
 {% extends 'base.html' %}
 
-{% block title %}Products{% endblock %}
+{% block title %}Mahsulotlar{% endblock %}
 
 {% block content %}
 <div class="container mx-auto py-6">
-    <h1 class="text-3xl font-bold text-center mb-6">Products</h1>
+    <h1 class="text-3xl font-bold text-center mb-6">Mahsulotlar</h1>
 
-    <!-- Products List -->
+    <!-- Mahsulotlar Ro'yxati -->
     <div class="overflow-x-auto">
         <table class="table-auto w-full bg-white shadow-md rounded-lg mb-6">
             <thead>
                 <tr class="bg-gray-200">
-                    <th class="px-4 py-2 text-left font-medium text-gray-700">Name</th>
-                    <th class="px-4 py-2 text-left font-medium text-gray-700">Price</th>
+                    <th class="px-4 py-2 text-left font-medium text-gray-700">Nomi</th>
+                    <th class="px-4 py-2 text-left font-medium text-gray-700">Narxi</th>
                 </tr>
             </thead>
             <tbody id="products-list">
@@ -26,9 +26,9 @@
         </table>
     </div>
 
-    <!-- Add Product Form -->
+    <!-- Mahsulot Qo'shish Formasi -->
     <div class="bg-white shadow-md rounded-lg p-6">
-        <h2 class="text-xl font-bold mb-4 text-center">Add New Product</h2>
+        <h2 class="text-xl font-bold mb-4 text-center">Yangi Mahsulot Qo'shish</h2>
         <form id="create-product-form" action="{% url 'create_product' %}" method="POST" hx-post="{% url 'create_product' %}" hx-target="#products-list" hx-swap="beforeend">
             {% csrf_token %}
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -37,7 +37,7 @@
             </div>
             <div class="mt-6 text-center">
                 <button type="submit" class="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 transition">
-                    Add Product
+                    Mahsulot Qo'shish
                 </button>
             </div>
         </form>
