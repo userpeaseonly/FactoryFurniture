@@ -8,50 +8,69 @@
     <link href="{% static 'css/styles.css' %}" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" />
 </head>
-<body class="bg-gray-100 text-gray-800">
-    <!-- Header -->
-    <header class="bg-gray-800 text-white">
-        <nav class="container mx-auto px-6 py-3 flex flex-wrap items-center justify-between">
-            <div class="text-lg font-bold">
-                <a href="{% url 'home' %}" class="hover:text-yellow-400">Furniture Factory</a>
-            </div>
-            <!-- Hamburger Menu for Mobile -->
-            <button class="lg:hidden text-white focus:outline-none" id="mobile-menu-button">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-                </svg>
-            </button>
-            <!-- Navigation Links -->
-            <ul class="hidden lg:flex space-x-6 w-full lg:w-auto lg:flex-row lg:items-center mt-4 lg:mt-0" id="mobile-menu">
-                <li><a href="{% url 'home' %}" class="block lg:inline-block text-white hover:text-yellow-400">Home</a></li>
-                <li><a href="{% url 'dashboard' %}" class="block lg:inline-block text-white hover:text-yellow-400">Dashboard</a></li>
-                <li><a href="{% url 'dealers' %}" class="block lg:inline-block text-white hover:text-yellow-400">Dealers</a></li>
-                <li><a href="{% url 'products' %}" class="block lg:inline-block text-white hover:text-yellow-400">Products</a></li>
-                <li><a href="{% url 'orders' %}" class="block lg:inline-block text-white hover:text-yellow-400">Orders</a></li>
-            </ul>
+<body class="bg-gray-100 text-gray-800 flex">
+
+    <!-- Sidebar -->
+    <aside class="bg-gray-800 text-white w-64 space-y-6 py-7 px-2 hidden sm:block fixed inset-y-0">
+        <!-- Brand -->
+        <div class="text-lg font-bold text-center">
+            <a href="{% url 'home' %}" class="text-yellow-400">Furniture Factory</a>
+        </div>
+        <!-- Navigation Links -->
+        <nav>
+            <a href="{% url 'home' %}" class="block py-2.5 px-4 rounded hover:bg-gray-700">Home</a>
+            <a href="{% url 'dashboard' %}" class="block py-2.5 px-4 rounded hover:bg-gray-700">Dashboard</a>
+            <a href="{% url 'dealers' %}" class="block py-2.5 px-4 rounded hover:bg-gray-700">Dealers</a>
+            <a href="{% url 'products' %}" class="block py-2.5 px-4 rounded hover:bg-gray-700">Products</a>
+            <a href="{% url 'orders' %}" class="block py-2.5 px-4 rounded hover:bg-gray-700">Orders</a>
         </nav>
-    </header>
+    </aside>
+
+    <!-- Mobile Sidebar -->
+    <aside class="bg-gray-800 text-white fixed inset-y-0 left-0 w-64 z-50 transform -translate-x-full transition-transform duration-300 ease-in-out sm:hidden" id="mobile-sidebar">
+        <!-- Brand -->
+        <div class="text-lg font-bold text-center py-4">
+            <a href="{% url 'home' %}" class="text-yellow-400">Furniture Factory</a>
+        </div>
+        <!-- Navigation Links -->
+        <nav>
+            <a href="{% url 'home' %}" class="block py-2.5 px-4 rounded hover:bg-gray-700">Home</a>
+            <a href="{% url 'dashboard' %}" class="block py-2.5 px-4 rounded hover:bg-gray-700">Dashboard</a>
+            <a href="{% url 'dealers' %}" class="block py-2.5 px-4 rounded hover:bg-gray-700">Dealers</a>
+            <a href="{% url 'products' %}" class="block py-2.5 px-4 rounded hover:bg-gray-700">Products</a>
+            <a href="{% url 'orders' %}" class="block py-2.5 px-4 rounded hover:bg-gray-700">Orders</a>
+        </nav>
+    </aside>
+
+    <!-- Mobile Menu Button -->
+    <button class="fixed top-4 left-4 z-50 bg-gray-800 text-white p-2 rounded sm:hidden" id="mobile-menu-button">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+        </svg>
+    </button>
 
     <!-- Main Content -->
-    <main class="container mx-auto px-6 py-6">
-        {% block content %}
-        {% endblock %}
-    </main>
+    <div class="flex-1 sm:ml-64 ml-0 flex flex-col min-h-screen">
+        <main class="flex-grow pt-6 px-6">
+            {% block content %}
+            {% endblock %}
+        </main>
 
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-4 mt-8">
-        <div class="container mx-auto text-center">
-            <p>&copy; 2024 Furniture Factory Management</p>
-        </div>
-    </footer>
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white py-4">
+            <div class="container mx-auto text-center">
+                <p>&copy; 2024 Furniture Factory Management</p>
+            </div>
+        </footer>
+    </div>
 
-    <!-- JavaScript for Mobile Menu -->
+    <!-- JavaScript for Sidebar Toggle -->
     <script>
         const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileSidebar = document.getElementById('mobile-sidebar');
 
         mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
+            mobileSidebar.classList.toggle('-translate-x-full');
         });
     </script>
 </body>

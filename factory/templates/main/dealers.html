@@ -20,10 +20,10 @@
             <tbody id="dealers-list">
                 {% for dealer in dealers %}
                 <tr class="border-b hover:bg-gray-50 transition">
-                    <td class="px-4 py-2 text-gray-800">{{ dealer.name }}</td>
-                    <td class="px-4 py-2 text-gray-600">{{ dealer.phone_number1 }}</td>
-                    <td class="px-4 py-2 text-gray-600">{{ dealer.phone_number2|default:"N/A" }}</td>
-                    <td class="px-4 py-2 text-gray-600">{{ dealer.address }}</td>
+                    <td class="px-4 py-2 text-gray-800 text-left">{{ dealer.name }}</td>
+                    <td class="px-4 py-2 text-gray-600 text-left">{{ dealer.phone_number1 }}</td>
+                    <td class="px-4 py-2 text-gray-600 text-left">{{ dealer.phone_number2|default:"N/A" }}</td>
+                    <td class="px-4 py-2 text-gray-600 text-left">{{ dealer.address }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

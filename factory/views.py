@@ -17,7 +17,7 @@ def dashboard(request):
     todays_orders = Order.objects.filter(delivery_date__date=timezone.now().date()).count()
 
     # Recent Orders
-    recent_orders = Order.objects.order_by('-delivery_date')[:5]
+    recent_orders = Order.objects.order_by('-delivery_date')
 
     # Orders by Delivery Type
     orders_by_delivery_type = (
@@ -135,6 +135,6 @@ def create_order(request):
                 comment=request.session.get('comment', '')
             )
             order.products.set(request.session['product_ids'])
-            return redirect('orders')
+            return redirect('dashboard')
 
     return render(request, f'main/create_order_step{step}.html', context)

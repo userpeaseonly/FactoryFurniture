@@ -41,10 +41,10 @@
             <tbody>
                 {% for order in recent_orders %}
                 <tr class="border-b hover:bg-gray-50 transition">
-                    <td class="px-4 py-2 text-gray-800">{{ order.dealer.name }}</td>
-                    <td class="px-4 py-2 text-gray-600">{{ order.delivery_date }}</td>
-                    <td class="px-4 py-2 text-gray-600">{{ order.get_delivery_type_display }}</td>
-                    <td class="px-4 py-2 text-gray-800 font-medium">{{ order.order_cost|floatformat:2 }} USD</td>
+                    <td class="px-4 py-2 text-gray-800 text-left">{{ order.dealer.name }}</td>
+                    <td class="px-4 py-2 text-gray-600 text-left">{{ order.delivery_date }}</td>
+                    <td class="px-4 py-2 text-gray-600 text-left">{{ order.get_delivery_type_display }}</td>
+                    <td class="px-4 py-2 text-gray-800 text-left font-medium">{{ order.order_cost|floatformat:2 }} USD</td>
                 </tr>
                 {% endfor %}
             </tbody>

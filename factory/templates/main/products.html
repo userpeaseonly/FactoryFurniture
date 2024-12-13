@@ -18,8 +18,8 @@
             <tbody id="products-list">
                 {% for product in products %}
                 <tr class="border-b hover:bg-gray-50 transition">
-                    <td class="px-4 py-2 text-gray-800">{{ product.name }}</td>
-                    <td class="px-4 py-2 text-gray-600">{{ product.price|floatformat:2 }}</td>
+                    <td class="px-4 py-2 text-gray-800 text-left">{{ product.name }}</td>
+                    <td class="px-4 py-2 text-gray-600 text-left">{{ product.price|floatformat:2 }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
