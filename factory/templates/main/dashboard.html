@@ -8,54 +8,60 @@
 
     <!-- Asosiy Ko'rsatkichlar -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div class="bg-white shadow-md rounded-lg p-6 text-center">
-            <h2 class="text-2xl font-bold text-blue-600">{{ total_orders }}</h2>
-            <p class="text-gray-600">Jami Buyurtmalar</p>
+        <div class="bg-white shadow-md rounded-lg p-4 sm:p-6 text-center">
+            <h2 class="text-xl sm:text-2xl font-bold text-blue-600">{{ total_orders }}</h2>
+            <p class="text-gray-600 text-sm sm:text-base">Jami Buyurtmalar</p>
         </div>
-        <div class="bg-white shadow-md rounded-lg p-6 text-center">
-            <h2 class="text-2xl font-bold text-green-600">{{ total_dealers }}</h2>
-            <p class="text-gray-600">Jami Dilerlar</p>
+        <div class="bg-white shadow-md rounded-lg p-4 sm:p-6 text-center">
+            <h2 class="text-xl sm:text-2xl font-bold text-green-600">{{ total_dealers }}</h2>
+            <p class="text-gray-600 text-sm sm:text-base">Jami Dilerlar</p>
         </div>
-        <div class="bg-white shadow-md rounded-lg p-6 text-center">
-            <h2 class="text-2xl font-bold text-yellow-600">{{ total_products }}</h2>
-            <p class="text-gray-600">Jami Mahsulotlar</p>
+        <div class="bg-white shadow-md rounded-lg p-4 sm:p-6 text-center">
+            <h2 class="text-xl sm:text-2xl font-bold text-yellow-600">{{ total_products }}</h2>
+            <p class="text-gray-600 text-sm sm:text-base">Jami Mahsulotlar</p>
         </div>
-        <div class="bg-white shadow-md rounded-lg p-6 text-center">
-            <h2 class="text-2xl font-bold text-red-600">{{ todays_orders }}</h2>
-            <p class="text-gray-600">Bugungi Buyurtmalar</p>
+        <div class="bg-white shadow-md rounded-lg p-4 sm:p-6 text-center">
+            <h2 class="text-xl sm:text-2xl font-bold text-red-600">{{ todays_orders }}</h2>
+            <p class="text-gray-600 text-sm sm:text-base">Bugungi Buyurtmalar</p>
         </div>
     </div>
 
     <!-- So'nggi Buyurtmalar -->
-    <div class="bg-white shadow-md rounded-lg mb-8 overflow-x-auto">
-        <h3 class="text-lg font-bold p-4 border-b">So'nggi Buyurtmalar</h3>
-        <table class="table-auto w-full">
-            <thead>
-                <tr class="bg-gray-200">
-                    <th class="px-4 py-2 text-left font-medium text-gray-700">Diler</th>
-                    <th class="px-4 py-2 text-left font-medium text-gray-700">Yetkazib Berish Sanasi</th>
-                    <th class="px-4 py-2 text-left font-medium text-gray-700">Yetkazib Berish Turi</th>
-                    <th class="px-4 py-2 text-left font-medium text-gray-700">Narxi</th>
-                    <th class="px-4 py-2 text-left font-medium text-gray-700">Amallar</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for order in recent_orders %}
-                <tr class="border-b hover:bg-gray-50 transition">
-                    <td class="px-4 py-2 text-gray-800 text-left">{{ order.dealer.name }}</td>
-                    <td class="px-4 py-2 text-gray-600 text-left">{{ order.delivery_date }}</td>
-                    <td class="px-4 py-2 text-gray-600 text-left">{{ order.get_delivery_type_display }}</td>
-                    <td class="px-4 py-2 text-gray-800 text-left font-medium">{{ order.order_cost|floatformat:2 }} USD</td>
-                    <td class="px-4 py-2 text-gray-600 text-left flex space-x-4">
-                        <a href="{% url 'edit_order' order.id %}" class="text-blue-500 hover:text-blue-700">Tahrirlash</a>
-                        <a href="{% url 'delete_order' order.id %}" 
-                           onclick="return confirm('Ushbu buyurtmani o‘chirishga ishonchingiz komilmi?');" 
-                           class="text-red-500 hover:text-red-700">O'chirish</a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="bg-white shadow-md rounded-lg mb-8">
+        <h3 class="text-lg font-bold p-4 border-b text-center">So'nggi Buyurtmalar</h3>
+        <div class="overflow-x-auto">
+            <table class="table-auto w-full">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="px-4 py-2 text-left font-medium text-gray-700">Diler</th>
+                        <th class="px-4 py-2 text-left font-medium text-gray-700 hidden sm:table-cell">Sanasi</th>
+                        <th class="px-4 py-2 text-left font-medium text-gray-700 hidden md:table-cell">Turi</th>
+                        <th class="px-4 py-2 text-left font-medium text-gray-700">Narxi</th>
+                        <th class="px-4 py-2 text-left font-medium text-gray-700">Amallar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in recent_orders %}
+                    <tr class="border-b hover:bg-gray-50 transition">
+                        <td class="px-4 py-2 text-gray-800 text-left">{{ order.dealer.name }}</td>
+                        <td class="px-4 py-2 text-gray-600 text-left hidden sm:table-cell">{{ order.delivery_date }}</td>
+                        <td class="px-4 py-2 text-gray-600 text-left hidden md:table-cell">{{ order.get_delivery_type_display }}</td>
+                        <td class="px-4 py-2 text-gray-800 text-left font-medium">{{ order.order_cost|floatformat:2 }} USD</td>
+                        <td class="px-4 py-2 text-gray-600 flex flex-col sm:flex-row sm:space-x-4">
+                            <a href="{% url 'edit_order' order.id %}" class="text-blue-500 hover:text-blue-700">
+                                Tahrirlash
+                            </a>
+                            <a href="{% url 'delete_order' order.id %}" 
+                               onclick="return confirm('Ushbu buyurtmani o‘chirishga ishonchingiz komilmi?');" 
+                               class="text-red-500 hover:text-red-700">
+                                O'chirish
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <!-- Grafik Ko'rsatkichlar -->

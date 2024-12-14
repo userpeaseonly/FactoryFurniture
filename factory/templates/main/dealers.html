@@ -9,24 +9,26 @@
     <!-- Dilerlar Ro'yxati -->
     <div class="overflow-x-auto">
         <table class="table-auto w-full bg-white shadow-md rounded-lg mb-6">
-            <thead>
-                <tr class="bg-gray-200">
+            <thead class="bg-gray-200">
+                <tr>
                     <th class="px-4 py-2 text-left font-medium text-gray-700">Ismi</th>
-                    <th class="px-4 py-2 text-left font-medium text-gray-700">Telefon 1</th>
-                    <th class="px-4 py-2 text-left font-medium text-gray-700">Telefon 2</th>
-                    <th class="px-4 py-2 text-left font-medium text-gray-700">Manzil</th>
+                    <th class="px-4 py-2 text-left font-medium text-gray-700 hidden sm:table-cell">Telefon 1</th>
+                    <th class="px-4 py-2 text-left font-medium text-gray-700 hidden md:table-cell">Telefon 2</th>
+                    <th class="px-4 py-2 text-left font-medium text-gray-700 hidden md:table-cell">Manzil</th>
                     <th class="px-4 py-2 text-left font-medium text-gray-700">Harakatlar</th>
                 </tr>
             </thead>
             <tbody id="dealers-list">
                 {% for dealer in dealers %}
                 <tr class="border-b hover:bg-gray-50 transition">
-                    <td class="px-4 py-2 text-gray-800 text-left">{{ dealer.name }}</td>
-                    <td class="px-4 py-2 text-gray-600 text-left">{{ dealer.phone_number1 }}</td>
-                    <td class="px-4 py-2 text-gray-600 text-left">{{ dealer.phone_number2|default:"Noma'lum" }}</td>
-                    <td class="px-4 py-2 text-gray-600 text-left">{{ dealer.address }}</td>
-                    <td class="px-4 py-2 text-gray-600 text-left flex space-x-4">
-                        <a href="{% url 'edit_dealer' dealer.id %}" class="text-blue-500 hover:text-blue-700">Tahrirlash</a>
+                    <td class="px-4 py-2 text-gray-800">{{ dealer.name }}</td>
+                    <td class="px-4 py-2 text-gray-600 hidden sm:table-cell">{{ dealer.phone_number1 }}</td>
+                    <td class="px-4 py-2 text-gray-600 hidden md:table-cell">{{ dealer.phone_number2|default:"Noma'lum" }}</td>
+                    <td class="px-4 py-2 text-gray-600 hidden md:table-cell">{{ dealer.address }}</td>
+                    <td class="px-4 py-2 text-gray-600 flex flex-col space-y-2 sm:space-x-4 sm:flex-row">
+                        <a href="{% url 'edit_dealer' dealer.id %}" class="text-blue-500 hover:text-blue-700">
+                            Tahrirlash
+                        </a>
                         <a href="{% url 'delete_dealer' dealer.id %}" 
                            onclick="return confirm('Ushbu dilerni o‘chirishga ishonchingiz komilmi?');" 
                            class="text-red-500 hover:text-red-700">

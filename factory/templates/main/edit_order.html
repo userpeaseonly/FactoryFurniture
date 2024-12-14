@@ -4,51 +4,67 @@
 {% block content %}
 <div class="container mx-auto py-6">
     <h1 class="text-3xl font-bold text-center mb-6">Buyurtmani Tahrirlash</h1>
-    <form method="POST" class="bg-white shadow-md rounded-lg p-8 max-w-4xl mx-auto space-y-8">
+    <form method="POST" class="bg-white shadow-md rounded-lg p-6 max-w-4xl mx-auto space-y-6">
         {% csrf_token %}
 
         <!-- 1-qadam: Diler -->
-        <div>
-            <h2 class="text-xl font-bold mb-4">1-qadam: Diler</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {{ step1_form.as_p }}
+        <div class="space-y-4">
+            <h2 class="text-xl font-bold text-gray-800">1-qadam: Diler</h2>
+            <div>
+                {{ step1_form.dealer.label_tag }}
+                <select name="dealer" class="block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                    {% for option in step1_form.dealer.field.choices %}
+                    <option value="{{ option.0 }}" {% if option.0 == step1_form.dealer.data %}selected{% endif %}>{{ option.1 }}</option>
+                    {% endfor %}
+                </select>
             </div>
         </div>
 
         <!-- 2-qadam: Mahsulotlar -->
-        <div>
-            <h2 class="text-xl font-bold mb-4">2-qadam: Mahsulotlar</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {% for widget in step2_form.products %}
-                <label class="block bg-gray-100 hover:bg-gray-200 rounded-lg shadow p-4 border transition">
-                    <input type="checkbox" name="{{ widget.name }}" value="{{ widget.value }}" class="form-checkbox h-5 w-5 text-blue-600 mr-2">
-                    {{ widget.choice_label }}
+        <div class="space-y-4">
+            <h2 class="text-xl font-bold text-gray-800">2-qadam: Mahsulotlar</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {% for product in step2_form.products.field.queryset %}
+                <label class="flex items-center bg-gray-50 border border-gray-300 p-2 rounded-lg shadow-sm hover:bg-gray-100 transition">
+                    <input type="checkbox" name="products" value="{{ product.id }}" class="form-checkbox h-5 w-5 text-blue-600 focus:ring-blue-500" {% if product in step2_form.products.data %}checked{% endif %}>
+                    <span class="ml-3">{{ product.name }} - {{ product.price|floatformat:2 }} USD</span>
                 </label>
                 {% endfor %}
             </div>
         </div>
 
         <!-- 3-qadam: Yetkazib Berish Turi -->
-        <div>
-            <h2 class="text-xl font-bold mb-4">3-qadam: Yetkazib Berish Turi</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {{ step3_form.as_p }}
+        <div class="space-y-4">
+            <h2 class="text-xl font-bold text-gray-800">3-qadam: Yetkazib Berish Turi</h2>
+            <div>
+                {{ step3_form.delivery_type.label_tag }}
+                <select name="delivery_type" class="block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                    {% for option in step3_form.delivery_type.field.choices %}
+                    <option value="{{ option.0 }}" {% if option.0 == step3_form.delivery_type.data %}selected{% endif %}>{{ option.1 }}</option>
+                    {% endfor %}
+                </select>
             </div>
         </div>
 
         <!-- 4-qadam: Yetkazib Berish Sana va Narxi -->
-        <div>
-            <h2 class="text-xl font-bold mb-4">4-qadam: Yetkazib Berish Sana va Narxi</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {{ step4_form.as_p }}
+        <div class="space-y-4">
+            <h2 class="text-xl font-bold text-gray-800">4-qadam: Yetkazib Berish Sana va Narxi</h2>
+            <div>
+                {{ step4_form.delivery_date.label_tag }}
+                <input type="date" name="delivery_date" value="{{ step4_form.delivery_date.data }}" class="block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+            </div>
+            <div>
+                {{ step4_form.order_cost.label_tag }}
+                <input type="number" name="order_cost" step="0.01" value="{{ step4_form.order_cost.data }}" class="block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="Buyurtma Narxi">
             </div>
         </div>
 
         <!-- 5-qadam: Izoh -->
-        <div>
-            <h2 class="text-xl font-bold mb-4">5-qadam: Izoh</h2>
-            <div class="grid grid-cols-1 gap-6">
-                {{ step5_form.as_p }}
+        <div class="space-y-4">
+            <h2 class="text-xl font-bold text-gray-800">5-qadam: Izoh</h2>
+            <div>
+                {{ step5_form.comment.label_tag }}
+                <textarea name="comment" rows="3" class="block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="Izoh (Majburiy Emas)">{{ step5_form.comment.data }}</textarea>
             </div>
         </div>
 
