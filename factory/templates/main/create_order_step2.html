@@ -1,11 +1,20 @@
 {% extends 'base.html' %}
 {% block title %}Buyurtma Yaratish - 2-qadam{% endblock %}
+
 {% block content %}
 <div class="container mx-auto py-6">
     <h1 class="text-3xl font-bold text-center mb-6">2-qadam: Mahsulot Tanlash</h1>
-    <form method="POST" class="max-w-lg mx-auto">
+    <form method="POST" class="max-w-4xl mx-auto">
         {% csrf_token %}
-        {{ form.as_p }}
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for product in form.fields.products.queryset %}
+            <div class="relative border border-gray-200 rounded-lg shadow-md hover:shadow-lg p-4">
+                <input type="checkbox" id="product-{{ product.id }}" name="products" value="{{ product.id }}" class="absolute top-4 right-4 h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                <h3 class="text-lg font-bold text-gray-800">{{ product.name }}</h3>
+                <p class="text-gray-600">{{ product.price|floatformat:2 }} USD</p>
+            </div>
+            {% endfor %}
+        </div>
         <div class="mt-6 text-center">
             <button type="submit" class="bg-blue-500 text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-600 transition">
                 Keyingisi

@@ -15,6 +15,7 @@
                     <th class="px-4 py-2 text-left font-medium text-gray-700">Telefon 1</th>
                     <th class="px-4 py-2 text-left font-medium text-gray-700">Telefon 2</th>
                     <th class="px-4 py-2 text-left font-medium text-gray-700">Manzil</th>
+                    <th class="px-4 py-2 text-left font-medium text-gray-700">Harakatlar</th>
                 </tr>
             </thead>
             <tbody id="dealers-list">
@@ -24,13 +25,21 @@
                     <td class="px-4 py-2 text-gray-600 text-left">{{ dealer.phone_number1 }}</td>
                     <td class="px-4 py-2 text-gray-600 text-left">{{ dealer.phone_number2|default:"Noma'lum" }}</td>
                     <td class="px-4 py-2 text-gray-600 text-left">{{ dealer.address }}</td>
+                    <td class="px-4 py-2 text-gray-600 text-left flex space-x-4">
+                        <a href="{% url 'edit_dealer' dealer.id %}" class="text-blue-500 hover:text-blue-700">Tahrirlash</a>
+                        <a href="{% url 'delete_dealer' dealer.id %}" 
+                           onclick="return confirm('Ushbu dilerni o‘chirishga ishonchingiz komilmi?');" 
+                           class="text-red-500 hover:text-red-700">
+                            O‘chirish
+                        </a>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
 
-    <!-- Diler Qo'shish Formasi -->
+    <!-- Yangi Diler Qo'shish Formasi -->
     <div class="bg-white shadow-md rounded-lg p-6">
         <h2 class="text-xl font-bold text-center mb-4">Yangi Diler Qo'shish</h2>
         <form id="create-dealer-form" action="{% url 'create_dealer' %}" method="POST" 

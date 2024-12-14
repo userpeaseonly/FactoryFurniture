@@ -1,5 +1,5 @@
 from django.utils import timezone
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Count, Sum
 from django.http import JsonResponse
 from .models import Dealer, Product, Order
@@ -51,11 +51,48 @@ def create_product(request):
             return redirect('products')
     return JsonResponse({'error': 'Invalid data'}, status=400)
 
+def edit_product(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    if request.method == 'POST':
+        form = ProductForm(request.POST, instance=product)
+        if form.is_valid():
+            form.save()
+            return redirect('products')
+    else:
+        form = ProductForm(instance=product)
+    return render(request, 'main/edit_product.html', {'form': form, 'product': product})
+
+
+def delete_product(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    if request.method == 'POST':
+        product.delete()
+        return redirect('products')
+    return render(request, 'main/delete_product.html', {'product': product})
 
 def dealers_page(request):
     dealers = Dealer.objects.all()
     form = DealerForm()
     return render(request, 'main/dealers.html', {'dealers': dealers, 'form': form})
+
+def edit_dealer(request, pk):
+    dealer = get_object_or_404(Dealer, pk=pk)
+    if request.method == 'POST':
+        form = DealerForm(request.POST, instance=dealer)
+        if form.is_valid():
+            form.save()
+            return redirect('dealers')
+    else:
+        form = DealerForm(instance=dealer)
+    return render(request, 'main/edit_dealer.html', {'form': form, 'dealer': dealer})
+
+
+def delete_dealer(request, pk):
+    dealer = get_object_or_404(Dealer, pk=pk)
+    if request.method == 'POST':
+        dealer.delete()
+        return redirect('dealers')
+    return render(request, 'main/delete_dealer.html', {'dealer': dealer})
 
 def create_dealer(request):
     if request.method == 'POST':

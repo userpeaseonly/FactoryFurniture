@@ -13,6 +13,7 @@
                 <tr class="bg-gray-200">
                     <th class="px-4 py-2 text-left font-medium text-gray-700">Nomi</th>
                     <th class="px-4 py-2 text-left font-medium text-gray-700">Narxi</th>
+                    <th class="px-4 py-2 text-left font-medium text-gray-700">Harakatlar</th>
                 </tr>
             </thead>
             <tbody id="products-list">
@@ -20,16 +21,25 @@
                 <tr class="border-b hover:bg-gray-50 transition">
                     <td class="px-4 py-2 text-gray-800 text-left">{{ product.name }}</td>
                     <td class="px-4 py-2 text-gray-600 text-left">{{ product.price|floatformat:2 }}</td>
+                    <td class="px-4 py-2 text-gray-600 text-left flex space-x-4">
+                        <a href="{% url 'edit_product' product.id %}" class="text-blue-500 hover:text-blue-700">Tahrirlash</a>
+                        <a href="{% url 'delete_product' product.id %}" 
+                           onclick="return confirm('Ushbu mahsulotni o‘chirishga ishonchingiz komilmi?');" 
+                           class="text-red-500 hover:text-red-700">
+                            O‘chirish
+                        </a>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
 
-    <!-- Mahsulot Qo'shish Formasi -->
+    <!-- Yangi Mahsulot Qo'shish Formasi -->
     <div class="bg-white shadow-md rounded-lg p-6">
         <h2 class="text-xl font-bold mb-4 text-center">Yangi Mahsulot Qo'shish</h2>
-        <form id="create-product-form" action="{% url 'create_product' %}" method="POST" hx-post="{% url 'create_product' %}" hx-target="#products-list" hx-swap="beforeend">
+        <form id="create-product-form" action="{% url 'create_product' %}" method="POST" 
+              hx-post="{% url 'create_product' %}" hx-target="#products-list" hx-swap="beforeend">
             {% csrf_token %}
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 {{ form.name }}
