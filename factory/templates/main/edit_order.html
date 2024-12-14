@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Buyurtmani Tahrirlash{% endblock %}
+
+{% block content %}
+<div class="container mx-auto py-6">
+    <h1 class="text-3xl font-bold text-center mb-6">Buyurtmani Tahrirlash</h1>
+    <form method="POST">
+        {% csrf_token %}
+
+        <h2 class="text-xl font-bold mb-4">1-qadam: Diler</h2>
+        {{ step1_form.as_p }}
+
+        <h2 class="text-xl font-bold mb-4">2-qadam: Mahsulotlar</h2>
+        {{ step2_form.as_p }}
+
+        <h2 class="text-xl font-bold mb-4">3-qadam: Yetkazib Berish Turi</h2>
+        {{ step3_form.as_p }}
+
+        <h2 class="text-xl font-bold mb-4">4-qadam: Yetkazib Berish Sana va Narxi</h2>
+        {{ step4_form.as_p }}
+
+        <h2 class="text-xl font-bold mb-4">5-qadam: Izoh</h2>
+        {{ step5_form.as_p }}
+
+        <div class="mt-6 text-center">
+            <button type="submit" class="bg-blue-500 text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-600 transition">
+                O'zgarishlarni Saqlash
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

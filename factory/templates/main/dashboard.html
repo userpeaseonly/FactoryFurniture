@@ -36,6 +36,7 @@
                     <th class="px-4 py-2 text-left font-medium text-gray-700">Yetkazib Berish Sanasi</th>
                     <th class="px-4 py-2 text-left font-medium text-gray-700">Yetkazib Berish Turi</th>
                     <th class="px-4 py-2 text-left font-medium text-gray-700">Narxi</th>
+                    <th class="px-4 py-2 text-left font-medium text-gray-700">Amallar</th>
                 </tr>
             </thead>
             <tbody>
@@ -45,6 +46,12 @@
                     <td class="px-4 py-2 text-gray-600 text-left">{{ order.delivery_date }}</td>
                     <td class="px-4 py-2 text-gray-600 text-left">{{ order.get_delivery_type_display }}</td>
                     <td class="px-4 py-2 text-gray-800 text-left font-medium">{{ order.order_cost|floatformat:2 }} USD</td>
+                    <td class="px-4 py-2 text-gray-600 text-left flex space-x-4">
+                        <a href="{% url 'edit_order' order.id %}" class="text-blue-500 hover:text-blue-700">Tahrirlash</a>
+                        <a href="{% url 'delete_order' order.id %}" 
+                           onclick="return confirm('Ushbu buyurtmani o‘chirishga ishonchingiz komilmi?');" 
+                           class="text-red-500 hover:text-red-700">O'chirish</a>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

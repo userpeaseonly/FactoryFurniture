@@ -175,3 +175,62 @@ def create_order(request):
             return redirect('dashboard')
 
     return render(request, f'main/create_order_step{step}.html', context)
+
+
+def edit_order(request, pk):
+    order = get_object_or_404(Order, pk=pk)
+
+    if request.method == 'POST':
+        # Step 1: Edit Dealer
+        step1_form = OrderStepOneForm(request.POST)
+        # Step 2: Edit Products
+        step2_form = OrderStepTwoForm(request.POST)
+        # Step 3: Edit Delivery Type
+        step3_form = OrderStepThreeForm(request.POST)
+        # Step 4: Edit Delivery Date & Cost
+        step4_form = OrderStepFourForm(request.POST)
+        # Step 5: Edit Comments
+        step5_form = OrderStepFiveForm(request.POST)
+
+        if all([step1_form.is_valid(), step2_form.is_valid(), step3_form.is_valid(), step4_form.is_valid(), step5_form.is_valid()]):
+            # Save updated data to the order
+            order.dealer = step1_form.cleaned_data['dealer']
+            order.delivery_type = step3_form.cleaned_data['delivery_type']
+            order.delivery_date = step4_form.cleaned_data['delivery_date']
+            order.order_cost = step4_form.cleaned_data['order_cost']
+            order.comment = step5_form.cleaned_data['comment']
+
+            # Update products
+            products = step2_form.cleaned_data['products']
+            order.products.set(products)
+
+            order.save()
+            return redirect('dashboard')
+    else:
+        # Pre-fill forms with existing order data
+        step1_form = OrderStepOneForm(initial={'dealer': order.dealer})
+        step2_form = OrderStepTwoForm(initial={'products': order.products.all()})
+        step3_form = OrderStepThreeForm(initial={'delivery_type': order.delivery_type})
+        step4_form = OrderStepFourForm(initial={
+            'delivery_date': order.delivery_date,
+            'order_cost': order.order_cost
+        })
+        step5_form = OrderStepFiveForm(initial={'comment': order.comment})
+
+    return render(request, 'main/edit_order.html', {
+        'order': order,
+        'step1_form': step1_form,
+        'step2_form': step2_form,
+        'step3_form': step3_form,
+        'step4_form': step4_form,
+        'step5_form': step5_form
+    })
+
+def delete_order(request, pk):
+    order = get_object_or_404(Order, pk=pk)
+
+    if request.method == 'POST':
+        order.delete()
+        return redirect('dashboard')
+
+    return render(request, 'main/delete_order.html', {'order': order})
