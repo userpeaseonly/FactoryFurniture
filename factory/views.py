@@ -1,14 +1,18 @@
 from django.utils import timezone
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
+from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Sum
 from django.http import JsonResponse
 from .models import Dealer, Product, Order
 from .forms import DealerForm, ProductForm, OrderStepOneForm, OrderStepTwoForm, OrderStepThreeForm, OrderStepFourForm, OrderStepFiveForm
+from users.decorators import role_required
 
 
 def home(request):
     return render(request, 'main/home.html')
 
+@login_required
+@role_required("seller")
 def dashboard(request):
     # Key Metrics
     total_orders = Order.objects.count()
@@ -36,6 +40,8 @@ def dashboard(request):
     }
     return render(request, 'main/dashboard.html', context)
 
+@login_required
+@role_required("seller")
 def products_page(request):
     products = Product.objects.all()
     form = ProductForm()
@@ -51,6 +57,8 @@ def create_product(request):
             return redirect('products')
     return JsonResponse({'error': 'Invalid data'}, status=400)
 
+@login_required
+@role_required("seller")
 def edit_product(request, pk):
     product = get_object_or_404(Product, pk=pk)
     if request.method == 'POST':
@@ -63,6 +71,8 @@ def edit_product(request, pk):
     return render(request, 'main/edit_product.html', {'form': form, 'product': product})
 
 
+@login_required
+@role_required("seller")
 def delete_product(request, pk):
     product = get_object_or_404(Product, pk=pk)
     if request.method == 'POST':
@@ -70,11 +80,15 @@ def delete_product(request, pk):
         return redirect('products')
     return render(request, 'main/delete_product.html', {'product': product})
 
+@login_required
+@role_required("seller")
 def dealers_page(request):
     dealers = Dealer.objects.all()
     form = DealerForm()
     return render(request, 'main/dealers.html', {'dealers': dealers, 'form': form})
 
+@login_required
+@role_required("seller")
 def edit_dealer(request, pk):
     dealer = get_object_or_404(Dealer, pk=pk)
     if request.method == 'POST':
@@ -87,6 +101,8 @@ def edit_dealer(request, pk):
     return render(request, 'main/edit_dealer.html', {'form': form, 'dealer': dealer})
 
 
+@login_required
+@role_required("seller")
 def delete_dealer(request, pk):
     dealer = get_object_or_404(Dealer, pk=pk)
     if request.method == 'POST':
@@ -94,6 +110,8 @@ def delete_dealer(request, pk):
         return redirect('dealers')
     return render(request, 'main/delete_dealer.html', {'dealer': dealer})
 
+@login_required
+@role_required("seller")
 def create_dealer(request):
     if request.method == 'POST':
         form = DealerForm(request.POST)
@@ -104,10 +122,14 @@ def create_dealer(request):
             return redirect('dealers')
     return JsonResponse({'error': 'Invalid data'}, status=400)
 
+@login_required
+@role_required("seller")
 def orders(request):
     return render(request, 'main/orders.html')
 
 
+@login_required
+@role_required("seller")
 def create_order(request):
     step = int(request.GET.get('step', 1))
     context = {'step': step}
@@ -192,6 +214,8 @@ def create_order(request):
 
 
 
+@login_required
+@role_required("seller")
 def edit_order(request, pk):
     order = get_object_or_404(Order, pk=pk)
 
@@ -241,6 +265,8 @@ def edit_order(request, pk):
         'step5_form': step5_form
     })
 
+@login_required
+@role_required("seller")
 def delete_order(request, pk):
     order = get_object_or_404(Order, pk=pk)
 
