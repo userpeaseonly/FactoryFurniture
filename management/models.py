@@ -8,6 +8,12 @@ class Department(models.Model):
 
     def __str__(self):
         return self.name
+    
+    def get_count_calc(self):
+        """
+        Returns the number of employees that can still be added to the department.
+        """
+        return self.employee_limit - self.employee_set.count()
 
 
 class Position(models.Model):
@@ -27,3 +33,4 @@ class Employee(models.Model):
 
     def __str__(self):
         return self.name
+

@@ -6,7 +6,7 @@ from .forms import DepartmentForm, PositionForm, EmployeeForm, PositionReassignF
 
 # Department Views
 def department_list(request):
-    departments = Department.objects.all()
+    departments = Department.objects.prefetch_related("employee_set").all()
     return render(request, "management/department_list.html", {"departments": departments})
 
 
