@@ -8,6 +8,7 @@ from .managers import CustomUserManager
 class UserRoles(models.TextChoices):
     SELLER = "seller", _("Sotuvchi")
     DELIVERY = "delivery", _("Yetkazib beruvchi")
+    BOSS = "boss", _("Boshliq")
 
 
 class CustomUser(AbstractUser):

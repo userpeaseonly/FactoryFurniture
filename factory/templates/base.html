@@ -23,6 +23,9 @@
             <a href="{% url 'dealers' %}" class="block py-2.5 px-4 rounded hover:bg-gray-700">Dilerlar</a>
             <a href="{% url 'products' %}" class="block py-2.5 px-4 rounded hover:bg-gray-700">Mahsulotlar</a>
             <a href="{% url 'orders' %}" class="block py-2.5 px-4 rounded hover:bg-gray-700">Buyurtmalar</a>
+            {% if user.role == 'boss' %}
+            <a href="{% url 'department_list' %}" class="block py-2.5 px-4 rounded hover:bg-gray-700">Ishlab Chiqarish</a>
+            {% endif %}
         </nav>
     </aside>
 

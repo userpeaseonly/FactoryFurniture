@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Xodimlar{% endblock %}
+{% block content %}
+<div class="container mx-auto py-6">
+    <h1 class="text-3xl font-bold text-center mb-6">{{ department.name }} Bo'limi Xodimlari</h1>
+
+    <a href="{{ request.META.HTTP_REFERER|default:'#' }}" 
+        class="bg-gray-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-gray-600 transition mr-2">
+        Orqaga
+    </a>
+
+    <a href="{% url 'employee_create' department.id %}" class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition">
+        Yangi Xodim Qo'shish
+    </a>
+    <table class="table-auto w-full mt-6">
+        <thead>
+            <tr class="bg-gray-200">
+                <th class="px-4 py-2">Ismi</th>
+                <th class="px-4 py-2">Lavozim</th>
+                <th class="px-4 py-2">Ish Turi</th>
+                <th class="px-4 py-2">Telefon</th>
+                <th class="px-4 py-2">Amallar</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for employee in employees %}
+            <tr>
+                <td class="border px-4 py-2">{{ employee.name }}</td>
+                <td class="border px-4 py-2">{{ employee.position.name }}</td>
+                <td class="border px-4 py-2">{{ employee.employment_type }}</td>
+                <td class="border px-4 py-2">{{ employee.phone_number }}</td>
+                <td class="border px-4 py-2">
+                    <a href="{% url 'employee_edit' department.id employee.id %}" class="text-blue-500 hover:text-blue-700">Tahrirlash</a>
+                    <a href="{% url 'employee_delete' department.id employee.id %}" class="text-red-500 hover:text-red-700"
+                       onclick="return confirm('Ushbu xodimni o‘chirishga ishonchingiz komilmi?');">
+                        O'chirish
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

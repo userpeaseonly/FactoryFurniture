@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Lavozimlar{% endblock %}
+{% block content %}
+<div class="container mx-auto py-6">
+    <h1 class="text-3xl font-bold text-center mb-6">Lavozimlar</h1>
+    <a href="{% url 'position_create' %}" class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition">
+        Yangi Lavozim Qo'shish
+    </a>
+    <table class="table-auto w-full mt-6">
+        <thead>
+            <tr class="bg-gray-200">
+                <th class="px-4 py-2">Nomi</th>
+                <th class="px-4 py-2">Amallar</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for position in positions %}
+            <tr>
+                <td class="border px-4 py-2">{{ position.name }}</td>
+                <td class="border px-4 py-2">
+                    <a href="{% url 'position_edit' position.id %}" class="text-blue-500 hover:text-blue-700">Tahrirlash</a>
+                    <a href="{% url 'position_delete' position.id %}" class="text-red-500 hover:text-red-700"
+                       onclick="return confirm('Ushbu lavozimni o‘chirishga ishonchingiz komilmi?');">
+                        O'chirish
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

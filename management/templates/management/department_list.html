@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Bo'limlar{% endblock %}
+{% block content %}
+<div class="container mx-auto py-6">
+    <h1 class="text-3xl font-bold text-center mb-6">Bo'limlar</h1>
+
+    <a href="{{ request.META.HTTP_REFERER|default:'#' }}" 
+        class="bg-gray-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-gray-600 transition mr-2">
+        Orqaga
+    </a>
+
+    <a href="{% url 'department_create' %}" class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition">
+        Yangi Bo'lim Qo'shish
+    </a>
+    <table class="table-auto w-full mt-6">
+        <thead>
+            <tr class="bg-gray-200">
+                <th class="px-4 py-2">Nomi</th>
+                <th class="px-4 py-2">Xodimlar Limiti</th>
+                <th class="px-4 py-2">Amallar</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for department in departments %}
+            <tr>
+                <td class="border px-4 py-2">{{ department.name }}</td>
+                <td class="border px-4 py-2">{{ department.employee_limit }}</td>
+                <td class="border px-4 py-2">
+                    <a href="{% url 'employee_list' department.id %}" class="text-green-500 hover:text-green-700">Xodimlar</a>
+                    <a href="{% url 'department_edit' department.id %}" class="text-blue-500 hover:text-blue-700">Tahrirlash</a>
+                    <a href="{% url 'department_delete' department.id %}" class="text-red-500 hover:text-red-700"
+                       onclick="return confirm('Ushbu bo‘limni o‘chirishga ishonchingiz komilmi?');">
+                        O'chirish
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

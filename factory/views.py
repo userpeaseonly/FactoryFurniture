@@ -12,7 +12,7 @@ def home(request):
     return render(request, 'main/home.html')
 
 @login_required
-@role_required("seller")
+@role_required("seller", "boss")
 def dashboard(request):
     # Key Metrics
     total_orders = Order.objects.count()
@@ -41,7 +41,7 @@ def dashboard(request):
     return render(request, 'main/dashboard.html', context)
 
 @login_required
-@role_required("seller")
+@role_required("seller", "boss")
 def products_page(request):
     products = Product.objects.all()
     form = ProductForm()
@@ -72,7 +72,7 @@ def edit_product(request, pk):
 
 
 @login_required
-@role_required("seller")
+@role_required("seller", "boss")
 def delete_product(request, pk):
     product = get_object_or_404(Product, pk=pk)
     if request.method == 'POST':
@@ -81,14 +81,14 @@ def delete_product(request, pk):
     return render(request, 'main/delete_product.html', {'product': product})
 
 @login_required
-@role_required("seller")
+@role_required("seller", "boss")
 def dealers_page(request):
     dealers = Dealer.objects.all()
     form = DealerForm()
     return render(request, 'main/dealers.html', {'dealers': dealers, 'form': form})
 
 @login_required
-@role_required("seller")
+@role_required("seller", "boss")
 def edit_dealer(request, pk):
     dealer = get_object_or_404(Dealer, pk=pk)
     if request.method == 'POST':
@@ -102,7 +102,7 @@ def edit_dealer(request, pk):
 
 
 @login_required
-@role_required("seller")
+@role_required("seller", "boss")
 def delete_dealer(request, pk):
     dealer = get_object_or_404(Dealer, pk=pk)
     if request.method == 'POST':
@@ -111,7 +111,7 @@ def delete_dealer(request, pk):
     return render(request, 'main/delete_dealer.html', {'dealer': dealer})
 
 @login_required
-@role_required("seller")
+@role_required("seller", "boss")
 def create_dealer(request):
     if request.method == 'POST':
         form = DealerForm(request.POST)
@@ -123,13 +123,13 @@ def create_dealer(request):
     return JsonResponse({'error': 'Invalid data'}, status=400)
 
 @login_required
-@role_required("seller")
+@role_required("seller", "boss")
 def orders(request):
     return render(request, 'main/orders.html')
 
 
 @login_required
-@role_required("seller")
+@role_required("seller", "boss")
 def create_order(request):
     step = int(request.GET.get('step', 1))
     context = {'step': step}

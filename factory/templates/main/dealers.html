@@ -21,11 +21,11 @@
             <tbody id="dealers-list">
                 {% for dealer in dealers %}
                 <tr class="border-b hover:bg-gray-50 transition">
-                    <td class="px-4 py-2 text-gray-800">{{ dealer.name }}</td>
-                    <td class="px-4 py-2 text-gray-600 hidden sm:table-cell">{{ dealer.phone_number1 }}</td>
-                    <td class="px-4 py-2 text-gray-600 hidden md:table-cell">{{ dealer.phone_number2|default:"Noma'lum" }}</td>
-                    <td class="px-4 py-2 text-gray-600 hidden md:table-cell">{{ dealer.address }}</td>
-                    <td class="px-4 py-2 text-gray-600 flex flex-col space-y-2 sm:space-x-4 sm:flex-row">
+                    <td class="px-4 py-2 text-left text-gray-800">{{ dealer.name }}</td>
+                    <td class="px-4 py-2 text-left text-gray-600 hidden sm:table-cell">{{ dealer.phone_number1 }}</td>
+                    <td class="px-4 py-2 text-left text-gray-600 hidden md:table-cell">{{ dealer.phone_number2|default:"Noma'lum" }}</td>
+                    <td class="px-4 py-2 text-left text-gray-600 hidden md:table-cell">{{ dealer.address }}</td>
+                    <td class="px-4 py-2 text-left text-gray-600 flex flex-col space-y-2 sm:space-x-4 sm:flex-row">
                         <a href="{% url 'edit_dealer' dealer.id %}" class="text-blue-500 hover:text-blue-700">
                             Tahrirlash
                         </a>

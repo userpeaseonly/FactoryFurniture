@@ -27,6 +27,7 @@ urlpatterns = [
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('', include('factory.urls')),
     path('users/', include('users.urls')),
+    path('management/', include('management.urls')),
 ]
 
 urlpatterns += i18n_patterns(
