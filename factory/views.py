@@ -1,11 +1,21 @@
 from django.utils import timezone
-from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Count, Sum
+from django.db.models import Count
 from django.http import JsonResponse
-from .models import Dealer, Product, Order
-from .forms import DealerForm, ProductForm, OrderStepOneForm, OrderStepTwoForm, OrderStepThreeForm, OrderStepFourForm, OrderStepFiveForm
 from users.decorators import role_required
+from .models import Dealer, Product, Order
+from .forms import (
+    DealerForm, 
+    ProductForm, 
+    OrderStepOneForm, 
+    OrderStepTwoForm, 
+    OrderStepThreeForm, 
+    OrderStepFourForm, 
+    OrderStepFiveForm, 
+    StockIncrementForm
+)
 
 
 def home(request):
@@ -275,3 +285,20 @@ def delete_order(request, pk):
         return redirect('dashboard')
 
     return render(request, 'main/delete_order.html', {'order': order})
+
+
+def manage_stock(request):
+    products = Product.objects.all().order_by('name')
+    if request.method == 'POST':
+        product_id = request.POST.get('product_id')
+        product = get_object_or_404(Product, id=product_id)
+        form = StockIncrementForm(request.POST, instance=product)
+        if form.is_valid():
+            increment = form.cleaned_data['increment']
+            product.stock += increment
+            product.save()
+            messages.success(request, f"{product.name} uchun {increment} miqdor qo'shildi.")
+            return redirect('manage_stock')
+    else:
+        form = StockIncrementForm()
+    return render(request, 'stocks/manage_stock.html', {'products': products, 'form': form})

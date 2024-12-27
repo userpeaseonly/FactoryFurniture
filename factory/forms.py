@@ -93,3 +93,18 @@ class OrderStepFiveForm(forms.Form):
             'rows': 3,
         })
     )
+
+
+class StockIncrementForm(forms.ModelForm):
+    increment = forms.IntegerField(
+        min_value=0,
+        label="Qo'shish miqdori",
+        widget=forms.NumberInput(attrs={
+            'class': 'block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500',
+            'placeholder': "Qo'shish miqdori"
+        })
+    )
+
+    class Meta:
+        model = Product
+        fields = ['increment']

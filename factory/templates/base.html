@@ -23,6 +23,7 @@
             <a href="{% url 'dealers' %}" class="block py-2.5 px-4 rounded hover:bg-gray-700">Dilerlar</a>
             <a href="{% url 'products' %}" class="block py-2.5 px-4 rounded hover:bg-gray-700">Mahsulotlar</a>
             <a href="{% url 'orders' %}" class="block py-2.5 px-4 rounded hover:bg-gray-700">Buyurtmalar</a>
+            <a href="{% url 'manage_stock' %}" class="block py-2.5 px-4 rounded hover:bg-gray-700">Omborxona</a>
             {% if user.role == 'boss' %}
             <a href="{% url 'department_list' %}" class="block py-2.5 px-4 rounded hover:bg-gray-700">Ishlab Chiqarish</a>
             {% endif %}
@@ -42,6 +43,10 @@
             <a href="{% url 'dealers' %}" class="block py-2.5 px-4 rounded hover:bg-gray-700">Dilerlar</a>
             <a href="{% url 'products' %}" class="block py-2.5 px-4 rounded hover:bg-gray-700">Mahsulotlar</a>
             <a href="{% url 'orders' %}" class="block py-2.5 px-4 rounded hover:bg-gray-700">Buyurtmalar</a>
+            <a href="{% url 'manage_stock' %}" class="block py-2.5 px-4 rounded hover:bg-gray-700">Omborxona</a>
+            {% if user.role == 'boss' %}
+            <a href="{% url 'department_list' %}" class="block py-2.5 px-4 rounded hover:bg-gray-700">Ishlab Chiqarish</a>
+            {% endif %}
         </nav>
     </aside>
 
@@ -56,10 +61,10 @@
     <div class="flex-1 sm:ml-64 ml-0 flex flex-col min-h-screen">
         <main class="flex-grow pt-6 px-6">
             {% if messages %}
-            <div class="container mx-auto my-4">
+            <div class="mb-6">
                 {% for message in messages %}
-                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-lg mb-4">
-                    <p>{{ message }}</p>
+                <div class="bg-green-100 text-green-800 p-4 rounded mb-4">
+                    {{ message }}
                 </div>
                 {% endfor %}
             </div>
