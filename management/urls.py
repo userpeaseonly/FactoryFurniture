@@ -14,6 +14,7 @@ urlpatterns = [
     path("positions/create/", views.position_create, name="position_create"),
     path("positions/edit/<int:pk>/", views.position_edit, name="position_edit"),
     path("positions/delete/<int:pk>/", views.position_delete, name="position_delete"),
+    path("positions/reassign/<int:pk>/", views.position_reassign, name="position_reassign"),
 
     # Employee URLs
     path("departments/<int:department_id>/employees/", views.employee_list, name="employee_list"),

@@ -58,3 +58,13 @@ class EmployeeForm(forms.ModelForm):
                 "placeholder": "Telefon Raqami"
             }),
         }
+
+
+class PositionReassignForm(forms.Form):
+    new_position = forms.ModelChoiceField(
+        queryset=Position.objects.all(),
+        label="Yangi Lavozim",
+        widget=forms.Select(attrs={
+            "class": "block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500",
+        }),
+    )

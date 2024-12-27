@@ -1,41 +1,50 @@
 {% extends "base.html" %}
 {% block title %}Bo'limlar{% endblock %}
 {% block content %}
-<div class="container mx-auto py-6">
+<div class="container mx-auto py-6 px-4">
     <h1 class="text-3xl font-bold text-center mb-6">Bo'limlar</h1>
 
-    <a href="{{ request.META.HTTP_REFERER|default:'#' }}" 
-        class="bg-gray-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-gray-600 transition mr-2">
-        Orqaga
-    </a>
+    <!-- Action Buttons -->
+    <div class="flex flex-col sm:flex-row justify-center sm:justify-start gap-4 mb-6">
+        <a href="{{ request.META.HTTP_REFERER|default:'#' }}" 
+           class="bg-gray-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-gray-600 transition">
+            Orqaga
+        </a>
+        <a href="{% url 'department_create' %}" 
+           class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition">
+            Yangi Bo'lim Qo'shish
+        </a>
+        <a href="{% url 'position_list' %}" 
+           class="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-yellow-600 transition">
+            Lavozimlar
+        </a>
+    </div>
 
-    <a href="{% url 'department_create' %}" class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition">
-        Yangi Bo'lim Qo'shish
-    </a>
-    <table class="table-auto w-full mt-6">
-        <thead>
-            <tr class="bg-gray-200">
-                <th class="px-4 py-2">Nomi</th>
-                <th class="px-4 py-2">Xodimlar Limiti</th>
-                <th class="px-4 py-2">Amallar</th>
-            </tr>
-        </thead>
-        <tbody>
+    <!-- Departments List -->
+    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
             {% for department in departments %}
-            <tr>
-                <td class="border px-4 py-2">{{ department.name }}</td>
-                <td class="border px-4 py-2">{{ department.employee_limit }}</td>
-                <td class="border px-4 py-2">
-                    <a href="{% url 'employee_list' department.id %}" class="text-green-500 hover:text-green-700">Xodimlar</a>
-                    <a href="{% url 'department_edit' department.id %}" class="text-blue-500 hover:text-blue-700">Tahrirlash</a>
-                    <a href="{% url 'department_delete' department.id %}" class="text-red-500 hover:text-red-700"
+            <div class="border rounded-lg p-4 bg-gray-50 hover:bg-gray-100 transition">
+                <h2 class="text-lg font-bold text-gray-800">{{ department.name }}</h2>
+                <p class="text-sm text-gray-600"><strong>Xodimlar Limiti:</strong> {{ department.employee_limit }}</p>
+                <div class="flex justify-between mt-4">
+                    <a href="{% url 'employee_list' department.id %}" 
+                       class="text-green-500 hover:text-green-700 text-sm">
+                        Xodimlar
+                    </a>
+                    <a href="{% url 'department_edit' department.id %}" 
+                       class="text-blue-500 hover:text-blue-700 text-sm">
+                        Tahrirlash
+                    </a>
+                    <a href="{% url 'department_delete' department.id %}" 
+                       class="text-red-500 hover:text-red-700 text-sm"
                        onclick="return confirm('Ushbu bo‘limni o‘chirishga ishonchingiz komilmi?');">
                         O'chirish
                     </a>
-                </td>
-            </tr>
+                </div>
+            </div>
             {% endfor %}
-        </tbody>
-    </table>
+        </div>
+    </div>
 </div>
 {% endblock %}

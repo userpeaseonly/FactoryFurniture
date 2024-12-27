@@ -19,7 +19,7 @@ class Position(models.Model):
 
 class Employee(models.Model):
     department = models.ForeignKey(Department, on_delete=models.CASCADE, verbose_name=_("Bo'lim"))
-    position = models.ForeignKey(Position, on_delete=models.CASCADE, verbose_name=_("Lavozim"))
+    position = models.ForeignKey(Position, on_delete=models.PROTECT, verbose_name=_("Lavozim"))
     name = models.CharField(max_length=255, verbose_name=_("Xodim Ismi"))
     salary = models.DecimalField(max_digits=10, decimal_places=2, verbose_name=_("Oylik Maosh"))
     employment_type = models.CharField(max_length=50, verbose_name=_("Ish Turi"))  # Now a plain string

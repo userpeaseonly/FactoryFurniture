@@ -1,6 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
+from django.db.models.deletion import ProtectedError
 from .models import Department, Position, Employee
-from .forms import DepartmentForm, PositionForm, EmployeeForm
+from .forms import DepartmentForm, PositionForm, EmployeeForm, PositionReassignForm
 
 # Department Views
 def department_list(request):
@@ -55,12 +57,12 @@ def position_edit(request, pk):
     return render(request, "management/position_form.html", {"form": form, "position": position})
 
 
-def position_delete(request, pk):
-    position = get_object_or_404(Position, pk=pk)
-    if request.method == "POST":
-        position.delete()
-        return redirect("position_list")
-    return render(request, "management/position_confirm_delete.html", {"position": position})
+# def position_delete(request, pk):
+#     position = get_object_or_404(Position, pk=pk)
+#     if request.method == "POST":
+#         position.delete()
+#         return redirect("position_list")
+#     return render(request, "management/position_confirm_delete.html", {"position": position})
 
 # Employee Views
 def employee_list(request, department_id):
@@ -94,3 +96,41 @@ def employee_delete(request, department_id, pk):
         employee.delete()
         return redirect("employee_list", department_id=department_id)
     return render(request, "management/employee_confirm_delete.html", {"employee": employee, "department": department})
+
+
+def position_delete(request, pk):
+    position = get_object_or_404(Position, pk=pk)
+
+    if request.method == "POST":
+        try:
+            position.delete()
+            messages.success(request, f"Lavozim muvaffaqiyatli o'chirildi!")
+            return redirect("position_list")
+        except ProtectedError as e:
+            related_employees = e.protected_objects
+            messages.error(
+                request,
+                f"Lavozimni o'chirib bo'lmaydi. Quyidagi xodimlar lavozimga bog'langan: "
+                + ", ".join(str(emp) for emp in related_employees)
+            )
+            return redirect("position_list")
+
+    return render(request, "management/position_confirm_delete.html", {"position": position})
+
+
+def position_reassign(request, pk):
+    position = get_object_or_404(Position, pk=pk)
+
+    if request.method == "POST":
+        form = PositionReassignForm(request.POST)
+        if form.is_valid():
+            new_position = form.cleaned_data["new_position"]
+            employees = position.employee_set.all()
+            employees.update(position=new_position)
+            position.delete()
+            messages.success(request, f"Lavozim muvaffaqiyatli o'chirildi va xodimlar yangi lavozimga o'tkazildi!")
+            return redirect("position_list")
+    else:
+        form = PositionReassignForm()
+
+    return render(request, "management/position_reassign.html", {"form": form, "position": position})
