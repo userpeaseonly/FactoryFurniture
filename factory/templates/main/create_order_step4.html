@@ -1,5 +1,35 @@
 {% extends 'base.html' %}
 {% block title %}Buyurtma Yaratish - 4-qadam{% endblock %}
+
+{% block content %}
+<div class="container mx-auto py-6">
+    <h1 class="text-3xl font-bold text-center mb-6">4-qadam: Yetkazib Berish Sanasi va Narxini Kiriting</h1>
+    <div class="bg-white shadow-md rounded-lg p-6 max-w-2xl mx-auto">
+        <h2 class="text-lg font-bold mb-4">Tanlangan Mahsulotlar</h2>
+        <ul>
+            {% for item in order_summary %}
+            <li class="py-2 border-b">{{ item.name }} - {{ item.quantity }} ta - {{ item.cost|floatformat:2 }} USD</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <form method="POST" class="max-w-lg mx-auto mt-6">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="mt-6 flex justify-between">
+            {% if back_url %}
+                <a href="{{ back_url }}" class="bg-gray-500 text-white px-6 py-3 rounded-lg shadow-md hover:bg-gray-600 transition">
+                    Orqaga
+                </a>
+            {% endif %}
+            <button type="submit" class="bg-blue-500 text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-600 transition">
+                Keyingisi
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+{% comment %} {% extends 'base.html' %}
+{% block title %}Buyurtma Yaratish - 4-qadam{% endblock %}
 {% block content %}
 <div class="container mx-auto py-6">
     <h1 class="text-3xl font-bold text-center mb-6">4-qadam: Yetkazib Berish Sanasi va Narxini Kiriting</h1>
@@ -18,4 +48,4 @@
         </div>
     </form>
 </div>
-{% endblock %}
+{% endblock %} {% endcomment %}

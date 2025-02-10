@@ -51,13 +51,21 @@ class OrderStepOneForm(forms.Form):
     )
 
 
+# class OrderStepTwoForm(forms.Form):
+#     products = forms.ModelMultipleChoiceField(
+#         queryset=Product.objects.all(),
+#         widget=forms.CheckboxSelectMultiple(attrs={
+#             'class': 'form-checkbox h-5 w-5 text-blue-600 rounded focus:ring-blue-500 sm:h-6 sm:w-6',
+#         })
+#     )
 class OrderStepTwoForm(forms.Form):
     products = forms.ModelMultipleChoiceField(
         queryset=Product.objects.all(),
         widget=forms.CheckboxSelectMultiple(attrs={
             'class': 'form-checkbox h-5 w-5 text-blue-600 rounded focus:ring-blue-500 sm:h-6 sm:w-6',
-        })
+        }),
     )
+    product_quantities = forms.CharField(widget=forms.HiddenInput(), required=False)
 
 
 class OrderStepThreeForm(forms.Form):
