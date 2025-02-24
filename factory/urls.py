@@ -21,4 +21,6 @@ urlpatterns = [
     path('orders/delete/<int:pk>/', views.delete_order, name='delete_order'),
 
     path('stocks/manage/', views.manage_stock, name='manage_stock'),
+
+    path('products/manage/<int:pk>/', views.manage_product_stock, name='manage_product_stock'),
 ]

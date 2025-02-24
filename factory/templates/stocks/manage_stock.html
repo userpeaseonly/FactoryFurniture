@@ -9,24 +9,24 @@
             <tr class="bg-gray-200">
                 <th class="px-4 py-2 text-left">Mahsulot</th>
                 <th class="px-4 py-2 text-left">Narx</th>
-                <th class="px-4 py-2 text-left">Ombordagi Miqdor</th>
+                <th class="py-2 text-left">Ombordagi Miqdor</th>
                 <th class="px-4 py-2 text-left">Qo'shish</th>
             </tr>
         </thead>
         <tbody>
             {% for product in products %}
             <tr>
-                <td class="border px-4 py-2">{{ product.name }}</td>
-                <td class="border px-4 py-2">{{ product.price|floatformat:2 }}</td>
-                <td class="border px-4 py-2">{{ product.stock }}</td>
+                <td class="border px-4 py-2"><a href="{% url 'manage_product_stock' product.id %}">{{ product.name }}</a></td>
+                <td class="border px-4 py-2"><a href="{% url 'manage_product_stock' product.id %}">{{ product.price|floatformat:2 }}</a></td>
+                <td class="border py-2"><a href="{% url 'manage_product_stock' product.id %}">{{ product.stock }}</a></td>
                 <td class="border px-4 py-2">
-                    <form method="POST">
+                    <form method="POST" class="flex flex-col sm:flex-row gap-4 items-center">
                         {% csrf_token %}
                         <input type="hidden" name="product_id" value="{{ product.id }}">
                         <input type="number" name="increment" min="0" placeholder="Qo'shish miqdori"
                             class="block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
                         <button type="submit"
-                            class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition mt-2">
+                            class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition">
                             Qo'shish
                         </button>
                     </form>

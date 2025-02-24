@@ -14,7 +14,8 @@ from .forms import (
     OrderStepThreeForm, 
     OrderStepFourForm, 
     OrderStepFiveForm, 
-    StockIncrementForm
+    StockIncrementForm,
+    FutureStockForm,
 )
 
 
@@ -423,3 +424,19 @@ def manage_stock(request):
     else:
         form = StockIncrementForm()
     return render(request, 'stocks/manage_stock.html', {'products': products, 'form': form})
+
+@login_required
+@role_required("seller")
+def manage_product_stock(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    future_stock = product.futurestock if hasattr(product, 'futurestock') else None
+    print(future_stock)
+    if request.method == 'POST':
+        form = FutureStockForm(request.POST, instance=future_stock)
+        if form.is_valid():
+            product.save()
+            messages.success(request, f"{product.name} uchun miqdor qo'shildi.")
+            return redirect('manage_stock')
+    else:
+        form = FutureStockForm()
+    return render(request, 'product/product_page.html', {'product': product, 'future_stock': future_stock, 'form': form})

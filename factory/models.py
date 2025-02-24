@@ -16,6 +16,11 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+    
+    def get_stock_status(self):
+        if self.stock > 0:
+            return "In Stock"
+        return "Out of Stock"
 
 class DeliveryType(models.TextChoices):
     COLLECTION = 'collection', "Yig'ish"
@@ -41,3 +46,13 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f"{self.quantity} x {self.product.name} (Order #{self.order.id})"
+
+
+class FutureStock(models.Model):
+    product = models.OneToOneField(Product, on_delete=models.CASCADE)
+    future_stock = models.IntegerField()
+    date = models.DateTimeField()
+    finished = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Future Stock for {self.product.name}"
