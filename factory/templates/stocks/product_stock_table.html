@@ -1,0 +1,60 @@
+<!-- product_stock_table.html -->
+{% extends 'base.html' %}
+
+{% block title %}Mahsulot Zaxirasi{% endblock %}
+
+{% block content %}
+<div class="container mx-auto py-6">
+    <h1 class="text-3xl font-bold text-center mb-6">Mahsulot Zaxirasi</h1>
+    <table class="min-w-full bg-white border border-gray-300">
+        <thead>
+            <tr>
+                <th class="py-2 px-4 border-b">Mahsulot</th>
+                <th class="py-2 px-4 border-b">Omborxonada</th>
+                <th class="py-2 px-4 border-b">Sotishga Tayyor</th>
+                <th class="py-2 px-4 border-b">Sotilgan</th>
+                <th class="py-2 px-4 border-b">Jarayondagi Sanasi</th>
+                <th class="py-2 px-4 border-b">Jarayondagi Miqdori</th>
+                <th class="py-2 px-4 border-b">Shundan Sotilgan</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in product_data %}
+            <tr>
+                <td class="py-2 px-4 border-b text-center">{{ data.product.name }}</td>
+                <td class="py-2 px-4 border-b text-center">{{ data.stock }}</td>
+                <td class="py-2 px-4 border-b text-center">{{ data.ready_to_sell }}</td>
+                <td class="py-2 px-4 border-b text-center">
+                    {% if data.sold_items_before_future_stock %}
+                        {{ data.sold_items_before_future_stock }}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </td>
+                <td class="py-2 px-4 border-b text-center">
+                    {% if data.future_stock_date %}
+                        {{ data.future_stock_date|date:"Y-m-d H:i" }}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </td>
+                <td class="py-2 px-4 border-b text-center">
+                    {% if data.future_stock_quantity %}
+                        {{ data.future_stock_quantity }}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </td>
+                <td class="py-2 px-4 border-b text-center">
+                    {% if data.sold_items_after_future_stock %}
+                        {{ data.sold_items_after_future_stock }}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

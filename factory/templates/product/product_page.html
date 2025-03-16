@@ -23,6 +23,100 @@
     </tbody>
   </table>
 </div>
+
+<div class="container mx-auto">
+  <h1 class="text-3xl font-bold text-center mb-6">Jarayonda</h1>
+  {% if future_stock %}
+  <table class="table-auto w-full bg-white shadow-md rounded-lg mb-6">
+    <thead>
+      <tr class="bg-gray-200">
+        <th class="px-4 py-2 text-left">Soni</th>
+        <th class="px-4 py-2 text-left">Tayyor</th>
+        <th class="py-2 text-left">Sotishga Tayyor</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="border px-4 py-2">{{ future_stock.future_stock }}</td>
+        <td class="border py-2">{{ future_stock.date }}</td>
+        <td
+          class="border px-4 py-2 {% if future_stock.finished %} bg-red-500 {% else %} bg-green-400 {% endif %}"
+        >
+          {{ product.stock }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <form method="post" action="{% url 'future_stock_finished' product.id %}">
+    {% csrf_token %}
+    <button
+      class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+      type="submit"
+    >
+      Jarayonni Tugatish
+    </button>
+  </form>
+</div>
+{% else %}
+<p class="text-center text-gray-700">
+  Hozircha mahsulotni tayyorlash jarayonida emas
+</p>
+<div class="container mx-auto">
+  <h1 class="text-3xl font-bold text-center mb-6">
+    Kelajakdagi Mahsulot Qo'shish
+  </h1>
+  <form method="post" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    {% csrf_token %}
+    <div class="mb-4">
+      <label
+        class="block text-gray-700 text-sm font-bold mb-2"
+        for="id_future_stock"
+      >
+        Kelajakdagi Miqdor
+      </label>
+      {{ form.future_stock }}
+    </div>
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="id_date">
+        Sana
+      </label>
+      {{ form.date }}
+    </div>
+    <div class="flex items-center justify-between">
+      <button
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        type="submit"
+      >
+        Qo'shish
+      </button>
+    </div>
+  </form>
+</div>
+{% endif %} {% endblock %} {% comment %} {% extends "base.html" %} {% block
+title %}Mahsulot Boshqaruvi{% endblock %} {%block content %}
+<div class="container mx-auto py-6">
+  <h1 class="text-3xl font-bold text-center mb-6">Mahsulot Boshqaruvi</h1>
+  <table class="table-auto w-full bg-white shadow-md rounded-lg mb-6">
+    <thead>
+      <tr class="bg-gray-200">
+        <th class="px-4 py-2 text-left">Mahsulot</th>
+        <th class="px-4 py-2 text-left">Tayyor</th>
+        <th class="py-2 text-left">Sotishga Tayyor</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="border px-4 py-2">{{ product.name }}</td>
+        <td
+          class="border px-4 py-2 {% if product.stock < 0 %} bg-red-500 {% endif %}"
+        >
+          {{ product.stock }}
+        </td>
+        <td class="border py-2">{{ product.stock }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 <div class="container mx-auto">
   <h1 class="text-3xl font-bold text-center mb-6">Jarayonda</h1>
   {% if future_stock %}
@@ -50,8 +144,8 @@
   {% else %}
   <p class="text-center text-gray-700">
     Hozircha mahsulotni tayyorlash jarayonida emas
-    {{ form.as_p}}
   </p>
+
   {% endif %}
 </div>
-{% endblock %}
+{% endblock %} {% endcomment %}

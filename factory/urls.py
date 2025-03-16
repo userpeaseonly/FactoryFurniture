@@ -22,5 +22,9 @@ urlpatterns = [
 
     path('stocks/manage/', views.manage_stock, name='manage_stock'),
 
+    path('product-stock/', views.product_stock_view, name='product_stock'),
+
     path('products/manage/<int:pk>/', views.manage_product_stock, name='manage_product_stock'),
+
+    path('products/future-finished/<int:pk>', views.future_stock_finished, name='future_stock_finished'),
 ]

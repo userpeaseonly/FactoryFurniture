@@ -16,9 +16,13 @@
         <tbody>
             {% for product in products %}
             <tr>
-                <td class="border px-4 py-2"><a href="{% url 'manage_product_stock' product.id %}">{{ product.name }}</a></td>
-                <td class="border px-4 py-2"><a href="{% url 'manage_product_stock' product.id %}">{{ product.price|floatformat:2 }}</a></td>
-                <td class="border py-2"><a href="{% url 'manage_product_stock' product.id %}">{{ product.stock }}</a></td>
+                <td class="border px-4 py-2 hover:bg-gray-100 hover:underline hover:text-blue-500 transition duration-300 ease-in-out transform hover:scale-105">
+                    <a href="{% url 'manage_product_stock' product.id %}" class="hover:underline hover:text-blue-500 transition duration-300 ease-in-out transform hover:scale-105">
+                        {{ product.name }}
+                    </a>
+                </td>
+                <td class="border px-4 py-2 hover:bg-gray-100 hover:underline hover:text-blue-500 transition duration-300 ease-in-out transform hover:scale-105"><a href="{% url 'manage_product_stock' product.id %}" class="hover:underline hover:text-blue-500 transition duration-300 ease-in-out transform hover:scale-105">{{ product.price|floatformat:2 }}</a></td>
+                <td class="border py-2 hover:bg-gray-100 hover:underline hover:text-blue-500 transition duration-300 ease-in-out transform hover:scale-105"><a href="{% url 'manage_product_stock' product.id %}" class="hover:underline hover:text-blue-500 transition duration-300 ease-in-out transform hover:scale-105">{{ product.stock }}</a></td>
                 <td class="border px-4 py-2">
                     <form method="POST" class="flex flex-col sm:flex-row gap-4 items-center">
                         {% csrf_token %}

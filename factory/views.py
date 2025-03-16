@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.http import JsonResponse
 from users.decorators import role_required
-from .models import Dealer, Product, Order, OrderItem
+from .models import Dealer, Product, Order, OrderItem, FutureStock
 from .forms import (
     DealerForm, 
     ProductForm, 
@@ -139,90 +139,6 @@ def orders(request):
     return render(request, 'main/orders.html')
 
 
-# @login_required
-# @role_required("seller", "boss")
-# def create_order(request):
-#     step = int(request.GET.get('step', 1))
-#     context = {'step': step}
-
-#     # Step 1: Select or Add Dealer
-#     if step == 1:
-#         form = OrderStepOneForm(request.POST or None)
-#         if request.method == 'POST' and form.is_valid():
-#             request.session['dealer_id'] = form.cleaned_data['dealer'].id
-#             return redirect('/orders/create/?step=2')
-#         context['form'] = form
-
-#     # Step 2: Select Products
-#     elif step == 2:
-#         form = OrderStepTwoForm(request.POST or None, initial={
-#             'products': Product.objects.filter(id__in=request.session.get('product_ids', []))
-#         })
-#         if request.method == 'POST' and form.is_valid():
-#             request.session['product_ids'] = [product.id for product in form.cleaned_data['products']]
-#             return redirect('/orders/create/?step=3')
-#         context['form'] = form
-#         context['back_url'] = '/orders/create/?step=1'
-
-#     # Step 3: Select Delivery Type
-#     elif step == 3:
-#         form = OrderStepThreeForm(request.POST or None, initial={
-#             'delivery_type': request.session.get('delivery_type', '')
-#         })
-#         if request.method == 'POST' and form.is_valid():
-#             request.session['delivery_type'] = form.cleaned_data['delivery_type']
-#             return redirect('/orders/create/?step=4')
-#         context['form'] = form
-#         context['back_url'] = '/orders/create/?step=2'
-
-#     # Step 4: Specify Delivery Date and Cost
-#     elif step == 4:
-#         form = OrderStepFourForm(request.POST or None, initial={
-#             'delivery_date': request.session.get('delivery_date', ''),
-#             'order_cost': request.session.get('order_cost', '')
-#         })
-#         if request.method == 'POST' and form.is_valid():
-#             request.session['delivery_date'] = form.cleaned_data['delivery_date'].isoformat()
-#             request.session['order_cost'] = float(form.cleaned_data['order_cost'])
-#             return redirect('/orders/create/?step=5')
-#         context['form'] = form
-#         context['back_url'] = '/orders/create/?step=3'
-
-#     # Step 5: Write a Comment
-#     elif step == 5:
-#         form = OrderStepFiveForm(request.POST or None, initial={
-#             'comment': request.session.get('comment', '')
-#         })
-#         if request.method == 'POST' and form.is_valid():
-#             request.session['comment'] = form.cleaned_data['comment']
-#             return redirect('/orders/create/?step=6')
-#         context['form'] = form
-#         context['back_url'] = '/orders/create/?step=4'
-
-#     # Step 6: Confirm Order
-#     elif step == 6:
-#         context['order_summary'] = {
-#             'dealer': Dealer.objects.get(id=request.session['dealer_id']),
-#             'products': Product.objects.filter(id__in=request.session['product_ids']),
-#             'delivery_type': request.session['delivery_type'],
-#             'delivery_date': request.session['delivery_date'],
-#             'order_cost': request.session['order_cost'],
-#             'comment': request.session.get('comment', ''),
-#         }
-#         context['back_url'] = '/orders/create/?step=5'
-#         if request.method == 'POST':
-#             order = Order.objects.create(
-#                 dealer_id=request.session['dealer_id'],
-#                 delivery_type=request.session['delivery_type'],
-#                 delivery_date=request.session['delivery_date'],
-#                 order_cost=request.session['order_cost'],
-#                 comment=request.session.get('comment', '')
-#             )
-#             order.products.set(request.session['product_ids'])
-#             return redirect('dashboard')
-
-#     return render(request, f'main/create_order_step{step}.html', context)
-
 @login_required
 @role_required("seller", "boss")
 def create_order(request):
@@ -337,7 +253,7 @@ def create_order(request):
                 qty = request.session["order_products"].get(str(product.id), 1)
                 print("Creating OrderItem for", product.name, "with qty", qty)
                 OrderItem.objects.create(order=order, product=product, quantity=qty)
-                product.stock -= qty  # Allow negative stock
+                # product.stock -= qty  # Allow negative stock
                 product.save()
             
             return redirect("dashboard")
@@ -425,18 +341,140 @@ def manage_stock(request):
         form = StockIncrementForm()
     return render(request, 'stocks/manage_stock.html', {'products': products, 'form': form})
 
+
 @login_required
 @role_required("seller")
 def manage_product_stock(request, pk):
     product = get_object_or_404(Product, pk=pk)
     future_stock = product.futurestock if hasattr(product, 'futurestock') else None
-    print(future_stock)
+
     if request.method == 'POST':
         form = FutureStockForm(request.POST, instance=future_stock)
         if form.is_valid():
-            product.save()
-            messages.success(request, f"{product.name} uchun miqdor qo'shildi.")
-            return redirect('manage_stock')
+            future_stock = form.save(commit=False)
+            future_stock.product = product
+            future_stock.save()
+            messages.success(request, f"{product.name} uchun kelajakdagi miqdor qo'shildi.")
+            return redirect('manage_product_stock', pk=pk)
     else:
-        form = FutureStockForm()
-    return render(request, 'product/product_page.html', {'product': product, 'future_stock': future_stock, 'form': form})
+        form = FutureStockForm(instance=future_stock)
+
+    return render(request, 'product/product_page.html', {
+        'product': product,
+        'future_stock': future_stock,
+        'form': form
+    })
+
+@login_required
+@role_required("seller")
+def future_stock_finished(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    future_stock = product.futurestock if hasattr(product, 'futurestock') else None
+
+    if future_stock:
+        future_stock.finished = True
+        product.stock += future_stock.future_stock
+        product.save()
+        future_stock.save()
+        future_stock.delete()
+        messages.success(request, f"{product.name} uchun kelajakdagi miqdor tugatildi.")
+    else:
+        messages.error(request, f"{product.name} uchun kelajakdagi miqdor topilmadi.")
+
+    return redirect('manage_product_stock', pk=product.pk)
+
+
+
+# def product_stock_view(request):
+#     # Fetch all products
+#     products = Product.objects.all()
+
+#     # Create a list to store product data along with future stock information
+#     product_data = []
+    
+#     for product in products:
+#         # Get the future stock for the product (if it exists)
+#         future_stock = FutureStock.objects.filter(product=product).first()
+
+#         sold_items_before_future_stock = 0
+#         sold_items_after_future_stock = 0
+
+
+
+#         # Append product data to the list
+#         product_data.append({
+#             'product': product,
+#             'stock': product.stock,
+#             'future_stock_date': future_stock.date if future_stock else None,
+#             'future_stock_quantity': future_stock.future_stock if future_stock else None,
+#             'sold_items_before_future_stock': sold_items_before_future_stock,
+#             'sold_items_after_future_stock': sold_items_after_future_stock,
+#         })
+    
+#     # Pass the data to the template
+#     context = {
+#         'product_data': product_data,
+#     }
+#     return render(request, 'stocks/product_stock_table.html', context)
+
+from django.shortcuts import render
+from .models import Product, FutureStock, OrderItem
+
+def product_stock_view(request):
+    # Fetch all products
+    products = Product.objects.all()
+
+    # Create a list to store product data along with future stock information
+    product_data = []
+    
+    for product in products:
+        # Get the future stock for the product (if it exists)
+        future_stock = FutureStock.objects.filter(product=product).first()
+
+        # Initialize counters for sold items
+        sold_items_before_future_stock = 0
+        sold_items_after_future_stock = 0
+
+        # Get all order items for the product
+        order_items = OrderItem.objects.filter(product=product)
+
+        # Calculate sold items before and after future stock date
+        if future_stock:
+            # Items sold before the future stock date
+            sold_items_before_future_stock = sum(
+                item.quantity for item in order_items
+                if item.order.delivery_date < future_stock.date
+            )
+            # Items sold after the future stock date
+            sold_items_after_future_stock = sum(
+                item.quantity for item in order_items
+                if item.order.delivery_date >= future_stock.date
+            )
+        else:
+            # If no future stock exists, all items are considered sold before
+            sold_items_before_future_stock = sum(item.quantity for item in order_items)
+            sold_items_after_future_stock = 0
+        
+        ready_to_sell = product.stock - sold_items_before_future_stock
+        
+        
+        print("Product:", product.name)
+        print("Sold Items Before Future Stock:", sold_items_before_future_stock)
+        print("Sold Items After Future Stock:", sold_items_after_future_stock)
+
+        # Append product data to the list
+        product_data.append({
+            'product': product,
+            'stock': product.stock,
+            'ready_to_sell': ready_to_sell,
+            'future_stock_date': future_stock.date if future_stock else None,
+            'future_stock_quantity': future_stock.future_stock if future_stock else None,
+            'sold_items_before_future_stock': sold_items_before_future_stock,
+            'sold_items_after_future_stock': sold_items_after_future_stock,
+        })
+    
+    # Pass the data to the template
+    context = {
+        'product_data': product_data,
+    }
+    return render(request, 'stocks/product_stock_table.html', context)
