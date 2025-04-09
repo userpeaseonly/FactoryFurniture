@@ -15,6 +15,12 @@ urlpatterns = [
     path('dealers/edit/<int:pk>/', views.edit_dealer, name='edit_dealer'),
     path('dealers/delete/<int:pk>/', views.delete_dealer, name='delete_dealer'),
 
+    path('manage-orders/', views.manage_orders, name='manage_orders'),
+    path('archive-orders/', views.archived_orders, name='archive_orders'),
+    path('archive-orders/<int:pk>/', views.archive_order, name='archive_order'),
+    path('orders/approve-delivery/<int:pk>/', views.approve_delivery, name='approve_delivery'),
+    path('orders/approve-seller/<int:pk>/', views.approve_seller, name='approve_seller'),
+
     path('orders/', views.orders, name='orders'),
     path('orders/create/', views.create_order, name='create_order'),
     path('orders/edit/<int:pk>/', views.edit_order, name='edit_order'),

@@ -18,9 +18,7 @@ class Product(models.Model):
         return self.name
     
     def get_stock_status(self):
-        if self.stock > 0:
-            return "In Stock"
-        return "Out of Stock"
+        return "In Stock" if self.stock > 0 else "Out of Stock"
 
 class DeliveryType(models.TextChoices):
     COLLECTION = 'collection', "Yig'ish"
@@ -34,6 +32,8 @@ class Order(models.Model):
     delivery_date = models.DateTimeField()
     order_cost = models.DecimalField(max_digits=16, decimal_places=2)
     comment = models.TextField(blank=True, null=True)
+    approved_by_seller = models.BooleanField(default=False, editable=False)
+    approved_by_delivery = models.BooleanField(default=False, editable=False)
 
     def __str__(self):
         return f"Order #{self.id} for {self.dealer.name}"

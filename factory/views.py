@@ -138,6 +138,62 @@ def create_dealer(request):
 def orders(request):
     return render(request, 'main/orders.html')
 
+@login_required
+@role_required("seller", "boss")
+def archived_orders(request):
+    orders = Order.objects.filter(approved_by_seller=True).order_by('-delivery_date')
+    context = {
+        'orders': orders,
+    }
+    return render(request, 'main/archived_orders.html', context)
+
+
+@login_required
+@role_required("seller", "boss")
+def archive_order(request, pk):
+    order = get_object_or_404(Order, pk=pk)
+    order_items = OrderItem.objects.filter(order=order)
+    context = {
+        'order': order,
+        'order_items': order_items,
+    }
+    return render(request, 'main/archive_order_details.html', context)
+
+@login_required
+@role_required("seller", "boss", "delivery")
+def manage_orders(request):
+    orders = Order.objects.filter(approved_by_seller=False).order_by('-delivery_date')
+    context = {
+        'orders': orders,
+    }
+    return render(request, 'main/manage_orders.html', context)
+
+@login_required
+@role_required("seller", "boss")
+def approve_seller(request, pk):
+    order = get_object_or_404(Order, pk=pk)
+    if request.method == 'POST':
+        if not order.approved_by_delivery:
+            messages.error(request, "!!! Buyurtma hali Omborxonachi tomonidan tasdiqlanmagan !!!")
+            return redirect('manage_orders')
+        order.approved_by_seller = True
+        print("Order:", order)
+        order.save()
+        messages.success(request, "Buyurtma Sotuvchi tomonidan tasdiqlandi.")
+    return redirect('manage_orders')
+
+
+@login_required
+@role_required("delivery", "boss")
+def approve_delivery(request, pk):
+    order = get_object_or_404(Order, pk=pk)
+    if request.method == 'POST':
+        order.approved_by_delivery = True
+        print("Order:", order)
+        order.save()
+        messages.success(request, "Buyurtma Omborxonachi tomonidan tasdiqlandi.")
+    return redirect('manage_orders')
+
 
 @login_required
 @role_required("seller", "boss")
@@ -324,7 +380,8 @@ def delete_order(request, pk):
 
     return render(request, 'main/delete_order.html', {'order': order})
 
-
+@login_required
+@role_required("seller", "boss")
 def manage_stock(request):
     products = Product.objects.all().order_by('name')
     if request.method == 'POST':
@@ -365,6 +422,7 @@ def manage_product_stock(request, pk):
         'form': form
     })
 
+
 @login_required
 @role_required("seller")
 def future_stock_finished(request, pk):
@@ -398,8 +456,6 @@ def future_stock_finished(request, pk):
 
 #         sold_items_before_future_stock = 0
 #         sold_items_after_future_stock = 0
-
-
 
 #         # Append product data to the list
 #         product_data.append({

@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Buyurtmalar bilan Ishlash{% endblock %}
+
+{% block content %}
+<div class="container mx-auto py-6">
+
+    <!-- So'nggi Buyurtmalar -->
+    <div class="bg-white shadow-md rounded-lg mb-8">
+        <h3 class="text-lg font-bold p-4 border-b text-center">Buyurtmalar bilan Ishlash</h3>
+        <div class="overflow-x-auto">
+            <table class="table-auto w-full">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="px-4 py-2 text-left font-medium text-gray-700">Status</th>
+                        <th class="px-4 py-2 text-left font-medium text-gray-700">Diler</th>
+                        <th class="px-4 py-2 text-left font-medium text-gray-700 hidden sm:table-cell">Sanasi</th>
+                        <th class="px-4 py-2 text-left font-medium text-gray-700 hidden md:table-cell">Turi</th>
+                        <th class="px-4 py-2 text-left font-medium text-gray-700">Narxi</th>
+                        <th class="px-4 py-2 text-left font-medium text-gray-700">Amallar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr class="border-b hover:bg-gray-50 transition">
+                        <td class="px-4 py-2 text-gray-800 text-left">{% if order.approved_by_delivery %} + {% elif order.approved_by_seller %} + {% else %} -  - {% endif %}</td>
+                        <td class="px-4 py-2 text-gray-800 text-left">{{ order.dealer.name }}</td>
+                        <td class="px-4 py-2 text-gray-600 text-left hidden sm:table-cell">{{ order.delivery_date }}</td>
+                        <td class="px-4 py-2 text-gray-600 text-left hidden md:table-cell">{{ order.get_delivery_type_display }}</td>
+                        <td class="px-4 py-2 text-gray-800 text-left font-medium">{{ order.order_cost|floatformat:2 }} USD</td>
+                        <td class="px-4 py-2 text-gray-600 flex flex-col sm:flex-row sm:space-x-4">
+                            <form method="post" action="{% if user.role == 'seller' or user.role == 'boss' %}{% url 'approve_seller' order.id %}{% elif user.role == 'delivery' or user.role == 'boss' %}{% url 'approve_delivery' order.id %}{% endif %}">
+                                {% csrf_token %}
+                                <button type="submit" class="text-blue-500 hover:text-blue-700">
+                                    Tasdiqlash
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Buyurtma Tafsilotlari - {{ order.dealer.name }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto p-6">
+    <h1 class="text-3xl font-extrabold text-gray-800 mb-6">Buyurtma Tafsilotlari</h1>
+    <div class="bg-white shadow-lg rounded-lg p-6 mb-8 space-y-4">
+        <h2 class="text-2xl font-semibold text-gray-700">Buyurtma Ma'lumotlari</h2>
+        <div class="text-gray-600">
+            <p><span class="font-medium">Diler:</span> {{ order.dealer.name }}</p>
+            <p><span class="font-medium">Telefon 1:</span> {{ order.dealer.phone_number1 }}</p>
+            {% if order.dealer.phone_number2 %}
+            <p><span class="font-medium">Telefon 2:</span> {{ order.dealer.phone_number2 }}</p>
+            {% endif %}
+            <p><span class="font-medium">Manzil:</span> {{ order.dealer.address }}</p>
+            <p><span class="font-medium">Yetkazib berish turi:</span> {{ order.get_delivery_type_display }}</p>
+            <p><span class="font-medium">Yetkazib berish sanasi:</span> {{ order.delivery_date|date:"F j, Y, g:i a" }}</p>
+            <p><span class="font-medium">Buyurtma narxi:</span> ${{ order.order_cost }}</p>
+            <p><span class="font-medium">Izoh:</span> {{ order.comment|default:"Izoh yo'q" }}</p>
+            <p><span class="font-medium">Sotuvchi tomonidan tasdiqlandi:</span> {{ order.approved_by_seller|yesno:"Ha,Yo'q" }}</p>
+            <p><span class="font-medium">Yetkazib beruvchi tomonidan tasdiqlandi:</span> {{ order.approved_by_delivery|yesno:"Ha,Yo'q" }}</p>
+        </div>
+    </div>
+
+    <div class="bg-white shadow-lg rounded-lg p-6">
+        <h2 class="text-2xl font-semibold text-gray-700 mb-4">Buyurtma Mahsulotlari</h2>
+        <table class="table-auto w-full border border-gray-300 rounded-lg overflow-hidden">
+            <thead>
+                <tr class="bg-gray-200 text-gray-700">
+                    <th class="border border-gray-300 px-4 py-2 text-left">Mahsulot</th>
+                    <th class="border border-gray-300 px-4 py-2 text-left">Miqdor</th>
+                    <th class="border border-gray-300 px-4 py-2 text-left">Narx</th>
+                    <th class="border border-gray-300 px-4 py-2 text-left">Jami</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in order_items %}
+                <tr class="hover:bg-gray-100">
+                    <td class="border border-gray-300 px-4 py-2">{{ item.product.name }}</td>
+                    <td class="border border-gray-300 px-4 py-2">{{ item.quantity }}</td>
+                    <td class="border border-gray-300 px-4 py-2">${{ item.product.price }}</td>
+                    <td class="border border-gray-300 px-4 py-2">${{ item.quantity|floatformat:2|add:item.product.price|floatformat:2 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

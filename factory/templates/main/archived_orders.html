@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Arxivdagi Buyurtmalar{% endblock %}
+
+{% block content %}
+<div class="container mx-auto py-6 px-4 sm:px-6 lg:px-8">
+
+    <!-- Arxivdagi Buyurtmalar -->
+    <div class="bg-white shadow-md rounded-lg mb-8">
+        <h3 class="text-xl font-bold p-4 border-b text-center text-gray-800">Arxivdagi Buyurtmalar</h3>
+        <div class="overflow-x-auto">
+            <table class="table-auto w-full text-sm sm:text-base">
+                <thead>
+                    <tr class="bg-gray-100 text-gray-700">
+                        <th class="px-4 py-3 text-left font-semibold">Holati</th>
+                        <th class="px-4 py-3 text-left font-semibold">Diler</th>
+                        <th class="px-4 py-3 text-left font-semibold hidden sm:table-cell">Sana</th>
+                        <th class="px-4 py-3 text-left font-semibold hidden md:table-cell">Turi</th>
+                        <th class="px-4 py-3 text-left font-semibold">Narxi</th>
+                        <th class="px-4 py-3 text-left font-semibold">Amallar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr class="border-b hover:bg-gray-50 transition duration-200">
+                        <td class="px-4 py-3 text-gray-800 text-left">
+                            {% if order.approved_by_delivery %}
+                                <span class="text-green-600 font-bold">+</span>
+                            {% elif order.approved_by_seller %}
+                                <span class="text-yellow-600 font-bold">+</span>
+                            {% else %}
+                                <span class="text-red-600 font-bold">-</span>
+                            {% endif %}
+                        </td>
+                        <td class="px-4 py-3 text-gray-800 text-left">{{ order.dealer.name }}</td>
+                        <td class="px-4 py-3 text-gray-600 text-left hidden sm:table-cell">{{ order.delivery_date }}</td>
+                        <td class="px-4 py-3 text-gray-600 text-left hidden md:table-cell">{{ order.get_delivery_type_display }}</td>
+                        <td class="px-4 py-3 text-gray-800 text-left font-medium">{{ order.order_cost|floatformat:2 }} USD</td>
+                        <td class="px-4 py-3 text-gray-600 flex flex-col sm:flex-row sm:space-x-4">
+                            <a href="{% url 'archive_order' order.id %}" class="text-blue-500 hover:text-blue-700 underline">
+                                Detallar
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="px-4 py-6 text-center text-gray-500">
+                            Hech qanday buyurtma topilmadi.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
