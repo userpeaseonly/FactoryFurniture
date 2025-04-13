@@ -32,13 +32,13 @@ def dashboard(request):
     todays_orders = Order.objects.filter(delivery_date__date=timezone.now().date()).count()
 
     # Recent Orders
-    recent_orders = Order.objects.order_by('-delivery_date')
+    recent_orders = Order.objects.filter(approved_by_seller=False, approved_by_delivery=False).order_by('-delivery_date')
 
     # Orders by Delivery Type
     orders_by_delivery_type = (
         Order.objects.values('delivery_type')
         .annotate(count=Count('id'))
-        .order_by('-count')
+        .order_by('-count'),
     )
 
     context = {
@@ -176,6 +176,16 @@ def approve_seller(request, pk):
         if not order.approved_by_delivery:
             messages.error(request, "!!! Buyurtma hali Omborxonachi tomonidan tasdiqlanmagan !!!")
             return redirect('manage_orders')
+        
+        print("Order:", order)
+        print("Order Items: ", order.items.all())
+        
+        for item in order.items.all():
+            product = item.product
+            product.stock -= item.quantity
+            product.save()
+            print("Product:", product.name, "Stock after deduction:", product.stock)
+        
         order.approved_by_seller = True
         print("Order:", order)
         order.save()
@@ -400,7 +410,7 @@ def manage_stock(request):
 
 
 @login_required
-@role_required("seller")
+@role_required("seller", "boss")
 def manage_product_stock(request, pk):
     product = get_object_or_404(Product, pk=pk)
     future_stock = product.futurestock if hasattr(product, 'futurestock') else None
@@ -424,7 +434,7 @@ def manage_product_stock(request, pk):
 
 
 @login_required
-@role_required("seller")
+@role_required("seller", "boss")
 def future_stock_finished(request, pk):
     product = get_object_or_404(Product, pk=pk)
     future_stock = product.futurestock if hasattr(product, 'futurestock') else None
@@ -492,7 +502,10 @@ def product_stock_view(request):
         sold_items_after_future_stock = 0
 
         # Get all order items for the product
-        order_items = OrderItem.objects.filter(product=product)
+        order_ids = Order.objects.filter(approved_by_seller=False, approved_by_delivery=False).values_list('id', flat=True)
+        print("Order IDs:", order_ids)
+        order_items = OrderItem.objects.filter(product=product, order__id__in=order_ids)
+        print("Order Items:", order_items)
 
         # Calculate sold items before and after future stock date
         if future_stock:
