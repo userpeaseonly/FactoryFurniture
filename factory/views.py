@@ -169,6 +169,17 @@ def manage_orders(request):
     return render(request, 'main/manage_orders.html', context)
 
 @login_required
+@role_required("seller", "boss", "delivery")
+def order_detail(request, pk):
+    order = get_object_or_404(Order, pk=pk)
+    order_items = OrderItem.objects.filter(order=order)
+    context = {
+        'order': order,
+        'order_items': order_items,
+    }
+    return render(request, 'main/order_details.html', context)
+
+@login_required
 @role_required("seller", "boss")
 def approve_seller(request, pk):
     order = get_object_or_404(Order, pk=pk)
