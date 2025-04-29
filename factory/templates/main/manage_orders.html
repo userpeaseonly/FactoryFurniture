@@ -28,13 +28,11 @@
                         <td class="px-4 py-2 text-gray-600 text-left hidden sm:table-cell">{{ order.delivery_date }}</td>
                         <td class="px-4 py-2 text-gray-600 text-left hidden md:table-cell">{{ order.get_delivery_type_display }}</td>
                         <td class="px-4 py-2 text-gray-800 text-left font-medium">{{ order.order_cost|floatformat:2 }} USD</td>
+
                         <td class="px-4 py-2 text-gray-600 flex flex-col sm:flex-row sm:space-x-4">
-                            <form method="post" action="{% if user.role == 'seller' or user.role == 'boss' %}{% url 'approve_seller' order.id %}{% elif user.role == 'delivery' or user.role == 'boss' %}{% url 'approve_delivery' order.id %}{% endif %}">
-                                {% csrf_token %}
-                                <button type="submit" class="text-blue-500 hover:text-blue-700">
-                                    Tasdiqlash
-                                </button>
-                            </form>
+                            <a href="{% url 'order_detail' order.id %}" class="text-blue-500 hover:text-blue-700">
+                                Tafsilotlar
+                            </a>
                         </td>
                     </tr>
                     {% endfor %}
