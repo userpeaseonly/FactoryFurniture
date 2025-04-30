@@ -144,7 +144,7 @@ MODELTRANSLATION_TRANSLATION_REGISTRY = 'application.translation'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
 
@@ -152,3 +152,14 @@ MEDIA_URL = '/media/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+
+# CSRF settings
+CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_ALLOWED_ORIGINS', 'http://0.0.0.0:8020').split(',')
+
+# CORS settings
+CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', 'http://0.0.0.0:8020').split(',')
+CORS_TRUSTED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', 'http://0.0.0.0:8020').split(',')
+
