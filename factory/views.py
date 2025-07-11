@@ -221,41 +221,40 @@ def approve_delivery(request, pk):
 def create_order(request):
     step = int(request.GET.get("step", 1))
     context = {"step": step}
-    
+
     if step == 1:
         form = OrderStepOneForm(request.POST or None)
         if request.method == "POST" and form.is_valid():
             request.session["dealer_id"] = form.cleaned_data["dealer"].id
             return redirect("/orders/create/?step=2")
         context["form"] = form
-    
+
     elif step == 2:
         form = OrderStepTwoForm(request.POST or None)
         if request.method == "POST" and form.is_valid():
             selected_products = request.POST.getlist("products")
-            
+
             if not selected_products:
                 messages.error(request, "Mahsulot va miqdor tanlash kerak!")
                 return redirect("/orders/create/?step=2")
-            
+
             # Get quantities only for selected products
             product_quantities = []
             for product_id in selected_products:
-                quantity = request.POST.get(f"quantities_{product_id}")
-                if quantity:
+                if quantity := request.POST.get(f"quantities_{product_id}"):
                     product_quantities.append(quantity)
-            
+
             print("Selected Products:", selected_products)
             print("Product Quantities:", product_quantities)
-            
+
             product_data = {int(pid): int(qty) for pid, qty in zip(selected_products, product_quantities)}
             request.session["order_products"] = product_data
             print("Selected Products:", product_data)
             return redirect("/orders/create/?step=3")
-        
+
         context["form"] = form
         context['back_url'] = '/orders/create/?step=1'
-    
+
     elif step == 3:
         form = OrderStepThreeForm(request.POST or None)
         if request.method == "POST" and form.is_valid():
@@ -263,12 +262,12 @@ def create_order(request):
             return redirect("/orders/create/?step=4")
         context["form"] = form
         context['back_url'] = '/orders/create/?step=2'
-    
+
     elif step == 4:
         selected_products = Product.objects.filter(id__in=request.session.get("order_products", {}).keys())
         order_summary = []
         total_cost = 0
-        
+
         for product in selected_products:
             qty = request.session["order_products"].get(str(product.id), 1)
             cost = product.price * qty
@@ -276,7 +275,7 @@ def create_order(request):
             print("Product ID:", product.id, "Qty:", qty, "Cost:", cost)
             order_summary.append({"name": product.name, "quantity": qty, "cost": cost})
         context['back_url'] = '/orders/create/?step=3'
-        
+
         print("Total Cost:", total_cost)
         form = OrderStepFourForm(request.POST or None, initial={
             "delivery_date": request.session.get("delivery_date", ""),
@@ -286,9 +285,9 @@ def create_order(request):
             request.session["delivery_date"] = form.cleaned_data["delivery_date"].isoformat()
             request.session["order_cost"] = float(form.cleaned_data["order_cost"])
             return redirect("/orders/create/?step=5")
-        
+
         context.update({"form": form, "order_summary": order_summary})
-    
+
     elif step == 5:
         form = OrderStepFiveForm(request.POST or None, initial={
             "comment": request.session.get("comment", ""),
@@ -298,25 +297,27 @@ def create_order(request):
             return redirect("/orders/create/?step=6")
         context["form"] = form
         context['back_url'] = '/orders/create/?step=4'
-    
+
     elif step == 6:
         selected_products = Product.objects.filter(id__in=request.session.get("order_products", {}).keys())
         order_summary = []
         total_cost = request.session.get("order_cost", 0)
-        
+
         for product in selected_products:
             qty = request.session["order_products"].get(str(product.id), 1)
             cost = product.price * qty
             order_summary.append({"name": product.name, "quantity": qty, "cost": cost})
-        
+
         context.update({
             "order_summary": order_summary,
             "delivery_date": request.session.get("delivery_date", ""),
+            "delivery_type": request.session.get("delivery_type", ""),
             "order_cost": total_cost,
             "comment": request.session.get("comment", ""),
         })
         context['back_url'] = '/orders/create/?step=5'
-        
+        print("Delivery Type:", request.session["delivery_type"])
+
         if request.method == "POST":
             order = Order.objects.create(
                 dealer_id=request.session["dealer_id"],
@@ -325,16 +326,16 @@ def create_order(request):
                 order_cost=request.session["order_cost"],
                 comment=request.session.get("comment", ""),
             )
-            
+
             for product in selected_products:
                 qty = request.session["order_products"].get(str(product.id), 1)
                 print("Creating OrderItem for", product.name, "with qty", qty)
                 OrderItem.objects.create(order=order, product=product, quantity=qty)
                 # product.stock -= qty  # Allow negative stock
                 product.save()
-            
+
             return redirect("dashboard")
-    
+
     return render(request, f"main/create_order_step{step}.html", context)
 
 
