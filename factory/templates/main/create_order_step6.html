@@ -13,7 +13,18 @@
                 {% endfor %}
             </ul>
         </li>
-        <li class="py-2"><strong>Yetkazib Berish Turi:</strong> {{ delivery_type }}</li>
+        <li class="py-2">
+            <strong>Yetkazib Berish Turi:</strong>
+            {% if delivery_type == 'collection' %}
+                Yig'ish
+            {% elif delivery_type == 'delivery' %}
+                Yetkazib Berish
+            {% elif delivery_type == 'exportation' %}
+                Olib Ketish
+            {% else %}
+                -
+            {% endif %}
+        </li>
         <li class="py-2"><strong>Yetkazib Berish Sanasi:</strong> {{ delivery_date }}</li>
         <li class="py-2"><strong>Buyurtma Narxi:</strong> {{ order_cost|floatformat:2 }} USD</li>
         <li class="py-2"><strong>Izoh:</strong> {{ comment|default:"Yo'q" }}</li>
